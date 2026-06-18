@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use this software or its verification/reproducibility package, please cite it as below."
+title: "OFTY M1 Advanced — Verification & Reproducibility Repository"
+version: "v0.4.5-jms"
+date-released: 2026-06-18
+license: MIT
+type: software
+authors:
+  - family-names: "Ragosta"
+    given-names: "Andrea"
+    orcid: "https://orcid.org/0000-0002-7024-1569"
+repository-code: "[GitHub release URL to be inserted]"
+url: "[GitHub release URL to be inserted]"
+keywords:
+  - glaucoma
+  - intraocular pressure
+  - central corneal thickness
+  - corneal biomechanics
+  - clinical decision support
+  - deterministic rule-based system
+  - reproducible verification
+  - in-silico stress testing
+abstract: >-
+  Verification and reproducibility repository for OFTY M1 Advanced, a deterministic,
+  client-side, browser-based software layer that contextualizes heterogeneous
+  device-derived intraocular-pressure measurements without fusing them (experimental).
+  The repository contains, at two levels, (1) the founder-signed frozen
+  technical-verification package (frozen engine, schema, deterministic bundle,
+  verification harness, executed reports, and integrity manifests) preserved
+  unmodified, and (2) a manuscript-level addendum re-executing the Core-reference
+  parity study and the in-silico Monte Carlo v2 stress test reported in the
+  manuscript. It is a technical verification and reproducibility artifact only and
+  asserts no clinical validation or deployment.
+# NOTE: No DOI is asserted. A DOI may be added later as an optional archival
+# enhancement (e.g. Zenodo) if and when minted; do not invent one.
