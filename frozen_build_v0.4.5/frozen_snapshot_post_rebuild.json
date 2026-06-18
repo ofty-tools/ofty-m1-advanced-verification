@@ -1,0 +1,43 @@
+{
+  "phase": "post_rebuild",
+  "captured_utc": "2026-06-17T22:38:48.568Z",
+  "frozen": {
+    "m1_advanced_engine.js": {
+      "hash": "1fef6cb46ef014c00cf6326f4ea6bf3f307911ea1658fed05123fd3c03cae63a",
+      "bytes": 42816
+    },
+    "m1_advanced_schema.json": {
+      "hash": "fbd983b1a443a1700402cf65ed9537c4279394747250547504260690b4a89d06",
+      "bytes": 26052
+    },
+    "m1_advanced_storage_adapter.js": {
+      "hash": "d282045f73641342ce0b6a416399ad61a2db34719bb1437f13068284ea83fe87",
+      "bytes": 3656
+    },
+    "m1_advanced_tests.js": {
+      "hash": "106821db53addead07f5de51e494be506dcb9869b7e6678065535e2eedc44514",
+      "bytes": 48110
+    },
+    "m1_advanced_storage_tests.js": {
+      "hash": "fe11003d9fbbf368628593819cc9bba99b303c504003ca00255cce73194a2e39",
+      "bytes": 11652
+    },
+    "m1_advanced_fuzz_tests.js": {
+      "hash": "0c1310a6e595d6426bc4eed181c47aab306f025fd2ea27ea55d64675ca3b2884",
+      "bytes": 5200
+    },
+    "m1_advanced_version_sync_tests.js": {
+      "hash": "530cd4cf1a71c0e9cba06c50bfa3681f37344bcd79e53c0941f6fe3340e23eed",
+      "bytes": 3682
+    },
+    "M1_ADV_FREEZE_RECORD.md": {
+      "hash": "91a3aed3ae2aa660165139ac1e6446dc6c3dc155a4424daebe868d542bf98f19",
+      "bytes": 9548
+    },
+    "M1_ADV_UI_SPEC_v0.4.1.md": {
+      "hash": "7e954920da441098b5fe9d82cf4e5383fb58b049ed54bbfd07515a14a06dd451",
+      "bytes": 36695
+    }
+  },
+  "bundle_sha256": "9f9a0fe47c8285804268532634593c27539083a811e31e32bf71b33ad5f78ffd"
+}

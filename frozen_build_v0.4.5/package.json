@@ -1,0 +1,26 @@
+{
+  "name": "m1adv",
+  "version": "1.0.0",
+  "description": "OFTY-Gx-M1-Advanced — build gate + thin-layer UI (preliminary)",
+  "main": "m1_advanced_browser_entry.js",
+  "private": true,
+  "scripts": {
+    "build": "esbuild m1_advanced_browser_entry.js --bundle --format=iife --global-name=M1ADV --target=es2020 --outfile=m1_advanced_bundle.js",
+    "smoke:bundle": "node smoke_bundle.js",
+    "smoke:browser": "node browser_smoke.js",
+    "verify:manifest": "node verify_manifest.js",
+    "verify:frozen": "node verify_frozen_immutability.js",
+    "gate": "npm run build && npm run verify:frozen && npm run smoke:bundle && npm run verify:manifest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "esbuild": "^0.28.1"
+  },
+  "devDependencies": {
+    "playwright": "1.56.0"
+  }
+}

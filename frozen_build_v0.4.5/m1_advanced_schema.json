@@ -1,0 +1,642 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "M1-ADV-SCHEMA-1.3",
+  "title": "OFTY-Gx-M1-Advanced Output",
+  "oneOf": [
+    { "$ref": "#/$defs/SuccessORA" },
+    { "$ref": "#/$defs/SuccessCorvis" },
+    { "$ref": "#/$defs/SuccessBoth" },
+    { "$ref": "#/$defs/FailureValidation" },
+    { "$ref": "#/$defs/FailureMeasurement" }
+  ],
+
+  "$defs": {
+
+    "QualityLevel": {
+      "enum": ["high", "acceptable", "borderline", "poor", "unknown"]
+    },
+
+    "ApplicabilityLevel": {
+      "enum": ["standard", "limited"]
+    },
+
+    "ConfidenceLevel": {
+      "enum": ["high", "moderate", "low", "indeterminate"]
+    },
+
+    "MeasurementIdentity": {
+      "type": "object",
+      "required": ["eye", "encounter_id"],
+      "properties": {
+        "eye": { "enum": ["OD", "OS"] },
+        "encounter_id": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+
+    "ComparisonContext": {
+      "type": "object",
+      "required": ["basis", "comparison_valid", "gat_timestamp", "ora_timestamp", "corvis_timestamp"],
+      "properties": {
+        "basis": {
+          "enum": ["clinician_confirmed_same_session", "shared_encounter_id", "timestamps_only", "unconfirmed"]
+        },
+        "comparison_valid": { "type": "boolean" },
+        "gat_timestamp": { "type": ["string", "null"] },
+        "ora_timestamp": { "type": ["string", "null"] },
+        "corvis_timestamp": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": { "basis": { "enum": ["timestamps_only", "unconfirmed"] } },
+            "required": ["basis"]
+          },
+          "then": {
+            "properties": { "comparison_valid": { "const": false } }
+          }
+        }
+      ]
+    },
+
+    "MeasurementQuality": {
+      "type": "object",
+      "required": ["level", "raw_device_status", "quality_inputs"],
+      "properties": {
+        "level": { "$ref": "#/$defs/QualityLevel" },
+        "raw_device_status": { "type": ["string", "null"] },
+        "quality_inputs": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+
+    "ClinicalApplicability": {
+      "type": "object",
+      "required": ["level", "limitations"],
+      "properties": {
+        "level": { "$ref": "#/$defs/ApplicabilityLevel" },
+        "limitations": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+
+    "CHContext": {
+      "type": "object",
+      "required": ["value_mmhg", "out_of_observed_range_flag", "interpretation_displayed_to_user", "numerical_effect_on_iop"],
+      "properties": {
+        "value_mmhg": { "type": "number", "minimum": 1, "maximum": 25 },
+        "out_of_observed_range_flag": { "type": "boolean" },
+        "interpretation_displayed_to_user": { "type": "string" },
+        "numerical_effect_on_iop": { "const": false }
+      },
+      "additionalProperties": false
+    },
+
+    "AdditionalBiomech": {
+      "type": "object",
+      "required": ["ssi", "sp_a1", "display_label", "display_subtitle", "reference"],
+      "properties": {
+        "ssi": { "type": ["number", "null"] },
+        "sp_a1": { "type": ["number", "null"] },
+        "display_label": { "const": "Additional biomechanical parameters" },
+        "display_subtitle": { "type": "string" },
+        "reference": { "enum": ["untreated", "post_LVC", "unknown"] }
+      },
+      "additionalProperties": false
+    },
+
+    "BiomechanicalContext": {
+      "type": "object",
+      "required": ["ch_context", "additional_biomechanical_parameters"],
+      "properties": {
+        "ch_context": {
+          "oneOf": [ { "$ref": "#/$defs/CHContext" }, { "type": "null" } ]
+        },
+        "additional_biomechanical_parameters": {
+          "oneOf": [ { "$ref": "#/$defs/AdditionalBiomech" }, { "type": "null" } ]
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "ComparisonWithGat": {
+      "type": "object",
+      "required": ["gat_mmhg", "delta_mmhg", "comparison_clinically_interpretable"],
+      "properties": {
+        "gat_mmhg": { "type": "number" },
+        "delta_mmhg": { "type": "number" },
+        "comparison_clinically_interpretable": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+
+    "CoreReference": {
+      "type": "object",
+      "required": ["value_mmhg", "display_value_mmhg", "applicability", "limitation_reason"],
+      "properties": {
+        "value_mmhg": { "type": ["number", "null"] },
+        "display_value_mmhg": { "type": ["number", "null"] },
+        "applicability": { "enum": ["standard", "limited", "not_applicable"] },
+        "limitation_reason": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": { "properties": { "applicability": { "const": "not_applicable" } }, "required": ["applicability"] },
+          "then": { "properties": { "value_mmhg": { "type": "null" }, "display_value_mmhg": { "type": "null" } } }
+        },
+        {
+          "if": { "properties": { "applicability": { "enum": ["standard", "limited"] } }, "required": ["applicability"] },
+          "then": { "properties": { "value_mmhg": { "type": "number" }, "display_value_mmhg": { "type": "number" } } }
+        }
+      ]
+    },
+
+    "ORAMetadata": {
+      "type": "object",
+      "required": ["device_generation", "software_version"],
+      "properties": {
+        "device_generation": { "enum": ["G3", "legacy", "unknown"] },
+        "software_version": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+
+    "CorvisMetadata": {
+      "type": "object",
+      "required": ["software_version", "ssi_version", "reference_database"],
+      "properties": {
+        "software_version": { "type": ["string", "null"] },
+        "ssi_version": { "enum": ["SSI", "SSIv2", null] },
+        "reference_database": { "enum": ["untreated", "post_LVC", "unknown"] }
+      },
+      "additionalProperties": false
+    },
+
+    "CautionFlag": {
+      "type": "object",
+      "required": ["code", "scope"],
+      "properties": {
+        "code": {
+          "enum": [
+            "experimental_module",
+            "biomechanics_partially_assessed",
+            "post_refractive_surgery_invalid_linear",
+            "post_refractive_surgery_device_interpretation_limited",
+            "keratoconus_altered_biomechanics",
+            "corneal_edema_acute",
+            "dystrophy_or_scar_localized",
+            "ch_out_of_observed_range",
+            "quality_unreliable",
+            "quality_low_count",
+            "quality_unknown",
+            "cross_device_difference",
+            "marked_difference_vs_gat",
+            "temporal_comparison_invalid"
+          ]
+        },
+        "scope": { "enum": ["module", "core", "ora", "corvis", "cross_device", "ora_vs_gat", "corvis_vs_gat"] }
+      },
+      "additionalProperties": false
+    },
+
+    "CautionFlags": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/CautionFlag" },
+      "uniqueItems": true
+    },
+
+    "Downstream": {
+      "type": "object",
+      "required": ["eligibility", "eligible_for_target_comparison"],
+      "properties": {
+        "eligibility": { "const": "context_only" },
+        "eligible_for_target_comparison": { "const": false }
+      },
+      "additionalProperties": false
+    },
+
+    "Model": {
+      "type": "object",
+      "required": ["type", "intended_use", "limitations"],
+      "properties": {
+        "type": { "const": "deterministic_rule_cascade" },
+        "intended_use": { "const": "decision_support_only" },
+        "limitations": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+
+    "LogicTrace": {
+      "type": "object",
+      "required": ["validation_rules", "quality_rule", "applicability_rules", "confidence_rule", "comparison_rules"],
+      "properties": {
+        "validation_rules": { "type": "array", "items": { "type": "string" } },
+        "quality_rule": { "type": "string" },
+        "applicability_rules": { "type": "array", "items": { "type": "string" } },
+        "confidence_rule": { "type": "string" },
+        "comparison_rules": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+
+    "InputEchoORAInputs": {
+      "type": "object",
+      "required": ["iopcc", "ch", "selected_waveform_score", "measurement_count", "iopg", "crf", "provenance_attestation"],
+      "properties": {
+        "iopcc": { "type": "number" },
+        "ch": { "type": "number" },
+        "selected_waveform_score": { "type": "number" },
+        "measurement_count": { "type": "integer" },
+        "iopg": { "type": ["number", "null"] },
+        "crf": { "type": ["number", "null"] },
+        "provenance_attestation": {
+          "type": "object",
+          "required": ["values_from_same_device_result_confirmed", "basis", "reading_id"],
+          "properties": {
+            "values_from_same_device_result_confirmed": { "const": true },
+            "basis": { "enum": ["single_reading", "device_averaged_output"] },
+            "reading_id": { "type": ["string", "null"] }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "InputEchoCorvisInputs": {
+      "type": "object",
+      "required": ["biop", "corvis_quality_raw", "ssi", "sp_a1"],
+      "properties": {
+        "biop": { "type": "number" },
+        "corvis_quality_raw": { "type": ["string", "null"] },
+        "ssi": { "type": ["number", "null"] },
+        "sp_a1": { "type": ["number", "null"] }
+      },
+      "additionalProperties": false
+    },
+
+    "InputEchoModifiers": {
+      "type": "object",
+      "required": ["prior_refractive_surgery", "keratoconus_ectasia", "corneal_edema", "significant_dystrophy_or_scar"],
+      "properties": {
+        "prior_refractive_surgery": { "enum": ["LASIK", "PRK", "SMILE", "RK", "other", null] },
+        "keratoconus_ectasia": { "type": "boolean" },
+        "corneal_edema": { "type": "boolean" },
+        "significant_dystrophy_or_scar": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+
+    "InputEchoPreference": {
+      "type": "object",
+      "required": ["selected_source", "rationale", "timestamp"],
+      "properties": {
+        "selected_source": { "enum": ["ORA-IOPcc", "Corvis-bIOP", null] },
+        "rationale": { "type": ["string", "null"] },
+        "timestamp": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+
+    "InputEcho": {
+      "type": "object",
+      "required": ["device_branch", "gat_iop", "cct", "measurement_identity", "temporal", "modifiers", "ora_inputs", "corvis_inputs", "ora_metadata", "corvis_metadata", "clinician_documented_preference"],
+      "properties": {
+        "device_branch": { "enum": ["ora", "corvis", "both"] },
+        "gat_iop": { "type": "number" },
+        "cct": { "type": "number" },
+        "measurement_identity": {
+          "type": "object",
+          "required": ["eye", "encounter_id"],
+          "properties": {
+            "eye": { "enum": ["OD", "OS"] },
+            "encounter_id": { "type": ["string", "null"] }
+          },
+          "additionalProperties": false
+        },
+        "temporal": {
+          "type": "object",
+          "required": ["clinician_confirmation", "shared_encounter_id", "gat_timestamp", "ora_timestamp", "corvis_timestamp"],
+          "properties": {
+            "clinician_confirmation": { "type": "boolean" },
+            "shared_encounter_id": { "type": ["string", "null"] },
+            "gat_timestamp": { "type": ["string", "null"] },
+            "ora_timestamp": { "type": ["string", "null"] },
+            "corvis_timestamp": { "type": ["string", "null"] }
+          },
+          "additionalProperties": false
+        },
+        "modifiers": { "$ref": "#/$defs/InputEchoModifiers" },
+        "ora_inputs": { "oneOf": [ { "$ref": "#/$defs/InputEchoORAInputs" }, { "type": "null" } ] },
+        "corvis_inputs": { "oneOf": [ { "$ref": "#/$defs/InputEchoCorvisInputs" }, { "type": "null" } ] },
+        "ora_metadata": { "$ref": "#/$defs/ORAMetadata" },
+        "corvis_metadata": { "$ref": "#/$defs/CorvisMetadata" },
+        "clinician_documented_preference": { "oneOf": [ { "$ref": "#/$defs/InputEchoPreference" }, { "type": "null" } ] }
+      },
+      "additionalProperties": false
+    },
+
+    "DeviceMeasurementORA": {
+      "type": "object",
+      "required": ["source", "value_mmhg"],
+      "properties": {
+        "source": { "const": "ORA-IOPcc" },
+        "value_mmhg": { "type": "number", "minimum": 1, "maximum": 80 }
+      },
+      "additionalProperties": false
+    },
+
+    "DeviceMeasurementCorvis": {
+      "type": "object",
+      "required": ["source", "value_mmhg"],
+      "properties": {
+        "source": { "const": "Corvis-bIOP" },
+        "value_mmhg": { "type": "number", "minimum": 5, "maximum": 60 }
+      },
+      "additionalProperties": false
+    },
+
+    "BranchAssessmentORA": {
+      "type": "object",
+      "required": ["value_mmhg", "measurement_quality", "clinical_applicability", "biomechanical_context", "overall_interpretive_confidence"],
+      "properties": {
+        "value_mmhg": { "type": "number", "minimum": 1, "maximum": 80 },
+        "measurement_quality": { "$ref": "#/$defs/MeasurementQuality" },
+        "clinical_applicability": { "$ref": "#/$defs/ClinicalApplicability" },
+        "biomechanical_context": { "$ref": "#/$defs/BiomechanicalContext" },
+        "overall_interpretive_confidence": { "$ref": "#/$defs/ConfidenceLevel" }
+      },
+      "additionalProperties": false
+    },
+
+    "BranchAssessmentCorvis": {
+      "type": "object",
+      "required": ["value_mmhg", "measurement_quality", "clinical_applicability", "biomechanical_context", "overall_interpretive_confidence"],
+      "properties": {
+        "value_mmhg": { "type": "number", "minimum": 5, "maximum": 60 },
+        "measurement_quality": { "$ref": "#/$defs/MeasurementQuality" },
+        "clinical_applicability": { "$ref": "#/$defs/ClinicalApplicability" },
+        "biomechanical_context": { "$ref": "#/$defs/BiomechanicalContext" },
+        "overall_interpretive_confidence": { "$ref": "#/$defs/ConfidenceLevel" }
+      },
+      "additionalProperties": false
+    },
+
+    "Comparability": {
+      "type": "object",
+      "required": ["gat_vs_ora", "gat_vs_corvis", "ora_vs_corvis"],
+      "properties": {
+        "gat_vs_ora": { "enum": [true, false, "unknown"] },
+        "gat_vs_corvis": { "enum": [true, false, "unknown"] },
+        "ora_vs_corvis": { "enum": [true, false, "unknown"] }
+      },
+      "additionalProperties": false
+    },
+
+    "DeviceComparison": {
+      "type": "object",
+      "required": [
+        "absolute_difference_mmhg", "numerical_threshold_exceeded", "threshold_provenance",
+        "interpretation", "comparison_clinically_interpretable",
+        "cross_device_comparison_interpretability", "comparability"
+      ],
+      "properties": {
+        "absolute_difference_mmhg": { "type": "number", "minimum": 0 },
+        "numerical_threshold_exceeded": { "type": "boolean" },
+        "threshold_provenance": { "const": "OFTY design-derived review threshold" },
+        "interpretation": { "type": "string" },
+        "comparison_clinically_interpretable": { "type": "boolean" },
+        "cross_device_comparison_interpretability": { "enum": ["high", "moderate", "low", "not_assessable"] },
+        "comparability": { "$ref": "#/$defs/Comparability" }
+      },
+      "additionalProperties": false
+    },
+
+    "ClinicianPreference": {
+      "type": "object",
+      "required": ["selected_source", "rationale", "used_for_export", "timestamp"],
+      "properties": {
+        "selected_source": { "enum": ["ORA-IOPcc", "Corvis-bIOP", null] },
+        "rationale": { "type": ["string", "null"] },
+        "used_for_export": { "const": false },
+        "timestamp": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+
+    "SuccessORA": {
+      "type": "object",
+      "required": ["status", "result"],
+      "properties": {
+        "status": { "const": "success" },
+        "result": {
+          "type": "object",
+          "required": [
+            "module_id", "module_variant", "engine_id", "algorithm_version", "schema_version",
+            "inputs", "measurement_identity", "comparison_context",
+            "device_measurement", "comparison_with_gat",
+            "measurement_quality", "clinical_applicability", "biomechanical_context",
+            "overall_interpretive_confidence",
+            "branch_assessments", "device_comparison", "clinician_documented_preference",
+            "core_reference", "ora_metadata", "corvis_metadata",
+            "logic_trace", "model", "downstream", "caution_flags"
+          ],
+          "properties": {
+            "module_id": { "const": "OFTY-Gx-M1" },
+            "module_variant": { "const": "advanced" },
+            "engine_id": { "const": "OFTY-Gx-M1-ADV-ORA" },
+            "algorithm_version": { "const": "0.4.3-experimental" },
+            "schema_version": { "const": "M1-ADV-SCHEMA-1.3" },
+            "inputs": { "$ref": "#/$defs/InputEcho" },
+            "measurement_identity": { "$ref": "#/$defs/MeasurementIdentity" },
+            "comparison_context": { "$ref": "#/$defs/ComparisonContext" },
+            "device_measurement": { "$ref": "#/$defs/DeviceMeasurementORA" },
+            "comparison_with_gat": { "$ref": "#/$defs/ComparisonWithGat" },
+            "measurement_quality": { "$ref": "#/$defs/MeasurementQuality" },
+            "clinical_applicability": { "$ref": "#/$defs/ClinicalApplicability" },
+            "biomechanical_context": { "$ref": "#/$defs/BiomechanicalContext" },
+            "overall_interpretive_confidence": { "$ref": "#/$defs/ConfidenceLevel" },
+            "branch_assessments": { "type": "null" },
+            "device_comparison": { "type": "null" },
+            "clinician_documented_preference": { "type": "null" },
+            "core_reference": { "$ref": "#/$defs/CoreReference" },
+            "ora_metadata": { "$ref": "#/$defs/ORAMetadata" },
+            "corvis_metadata": { "type": "null" },
+            "logic_trace": { "$ref": "#/$defs/LogicTrace" },
+            "model": { "$ref": "#/$defs/Model" },
+            "downstream": { "$ref": "#/$defs/Downstream" },
+            "caution_flags": { "$ref": "#/$defs/CautionFlags" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "SuccessCorvis": {
+      "type": "object",
+      "required": ["status", "result"],
+      "properties": {
+        "status": { "const": "success" },
+        "result": {
+          "type": "object",
+          "required": [
+            "module_id", "module_variant", "engine_id", "algorithm_version", "schema_version",
+            "inputs", "measurement_identity", "comparison_context",
+            "device_measurement", "comparison_with_gat",
+            "measurement_quality", "clinical_applicability", "biomechanical_context",
+            "overall_interpretive_confidence",
+            "branch_assessments", "device_comparison", "clinician_documented_preference",
+            "core_reference", "ora_metadata", "corvis_metadata",
+            "logic_trace", "model", "downstream", "caution_flags"
+          ],
+          "properties": {
+            "module_id": { "const": "OFTY-Gx-M1" },
+            "module_variant": { "const": "advanced" },
+            "engine_id": { "const": "OFTY-Gx-M1-ADV-CORVIS" },
+            "algorithm_version": { "const": "0.4.3-experimental" },
+            "schema_version": { "const": "M1-ADV-SCHEMA-1.3" },
+            "inputs": { "$ref": "#/$defs/InputEcho" },
+            "measurement_identity": { "$ref": "#/$defs/MeasurementIdentity" },
+            "comparison_context": { "$ref": "#/$defs/ComparisonContext" },
+            "device_measurement": { "$ref": "#/$defs/DeviceMeasurementCorvis" },
+            "comparison_with_gat": { "$ref": "#/$defs/ComparisonWithGat" },
+            "measurement_quality": { "$ref": "#/$defs/MeasurementQuality" },
+            "clinical_applicability": { "$ref": "#/$defs/ClinicalApplicability" },
+            "biomechanical_context": { "$ref": "#/$defs/BiomechanicalContext" },
+            "overall_interpretive_confidence": { "$ref": "#/$defs/ConfidenceLevel" },
+            "branch_assessments": { "type": "null" },
+            "device_comparison": { "type": "null" },
+            "clinician_documented_preference": { "type": "null" },
+            "core_reference": { "$ref": "#/$defs/CoreReference" },
+            "ora_metadata": { "type": "null" },
+            "corvis_metadata": { "$ref": "#/$defs/CorvisMetadata" },
+            "logic_trace": { "$ref": "#/$defs/LogicTrace" },
+            "model": { "$ref": "#/$defs/Model" },
+            "downstream": { "$ref": "#/$defs/Downstream" },
+            "caution_flags": { "$ref": "#/$defs/CautionFlags" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "SuccessBoth": {
+      "type": "object",
+      "required": ["status", "result"],
+      "properties": {
+        "status": { "const": "success" },
+        "result": {
+          "type": "object",
+          "required": [
+            "module_id", "module_variant", "engine_id", "algorithm_version", "schema_version",
+            "inputs", "measurement_identity", "comparison_context",
+            "device_measurement", "comparison_with_gat",
+            "measurement_quality", "clinical_applicability", "overall_interpretive_confidence",
+            "biomechanical_context",
+            "branch_assessments", "device_comparison", "clinician_documented_preference",
+            "core_reference", "ora_metadata", "corvis_metadata",
+            "logic_trace", "model", "downstream", "caution_flags"
+          ],
+          "properties": {
+            "module_id": { "const": "OFTY-Gx-M1" },
+            "module_variant": { "const": "advanced" },
+            "engine_id": { "const": "OFTY-Gx-M1-ADV-BOTH" },
+            "algorithm_version": { "const": "0.4.3-experimental" },
+            "schema_version": { "const": "M1-ADV-SCHEMA-1.3" },
+            "inputs": { "$ref": "#/$defs/InputEcho" },
+            "measurement_identity": { "$ref": "#/$defs/MeasurementIdentity" },
+            "comparison_context": { "$ref": "#/$defs/ComparisonContext" },
+            "device_measurement": { "type": "null" },
+            "comparison_with_gat": { "type": "null" },
+            "measurement_quality": { "type": "null" },
+            "clinical_applicability": { "type": "null" },
+            "overall_interpretive_confidence": { "type": "null" },
+            "biomechanical_context": { "$ref": "#/$defs/BiomechanicalContext" },
+            "branch_assessments": {
+              "type": "object",
+              "required": ["ora", "corvis"],
+              "properties": {
+                "ora": { "$ref": "#/$defs/BranchAssessmentORA" },
+                "corvis": { "$ref": "#/$defs/BranchAssessmentCorvis" }
+              },
+              "additionalProperties": false
+            },
+            "device_comparison": { "$ref": "#/$defs/DeviceComparison" },
+            "clinician_documented_preference": {
+              "oneOf": [ { "$ref": "#/$defs/ClinicianPreference" }, { "type": "null" } ]
+            },
+            "core_reference": { "$ref": "#/$defs/CoreReference" },
+            "ora_metadata": { "$ref": "#/$defs/ORAMetadata" },
+            "corvis_metadata": { "$ref": "#/$defs/CorvisMetadata" },
+            "logic_trace": { "$ref": "#/$defs/LogicTrace" },
+            "model": { "$ref": "#/$defs/Model" },
+            "downstream": { "$ref": "#/$defs/Downstream" },
+            "caution_flags": { "$ref": "#/$defs/CautionFlags" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "FailureValidation": {
+      "type": "object",
+      "required": ["status", "module_id", "module_variant", "engine_id", "algorithm_version", "schema_version", "failure"],
+      "properties": {
+        "status": { "const": "failure" },
+        "module_id": { "const": "OFTY-Gx-M1" },
+        "module_variant": { "const": "advanced" },
+        "engine_id": { "type": "string" },
+        "algorithm_version": { "const": "0.4.3-experimental" },
+        "schema_version": { "const": "M1-ADV-SCHEMA-1.3" },
+        "failure": {
+          "type": "object",
+          "required": ["type", "code", "message"],
+          "properties": {
+            "type": { "const": "validation_error" },
+            "code": {
+              "enum": [
+                "EYE_MISMATCH", "MISSING_REQUIRED_FIELD", "BRANCH_BOTH_INCOMPLETE",
+                "ORA_VALUES_NOT_SAME_RESULT", "OUT_OF_HARD_RANGE", "INVALID_DEVICE_BRANCH"
+              ]
+            },
+            "message": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "FailureMeasurement": {
+      "type": "object",
+      "required": ["status", "module_id", "module_variant", "engine_id", "algorithm_version", "schema_version", "failure"],
+      "properties": {
+        "status": { "const": "failure" },
+        "module_id": { "const": "OFTY-Gx-M1" },
+        "module_variant": { "const": "advanced" },
+        "engine_id": { "type": "string" },
+        "algorithm_version": { "const": "0.4.3-experimental" },
+        "schema_version": { "const": "M1-ADV-SCHEMA-1.3" },
+        "failure": {
+          "type": "object",
+          "required": ["type", "code", "message"],
+          "properties": {
+            "type": { "const": "measurement_failure" },
+            "code": {
+              "enum": ["ORA_NO_USABLE_WAVEFORM", "CORVIS_UNREADABLE", "DEVICE_ERROR", "CLINICIAN_INVALIDATED"]
+            },
+            "message": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+
+  }
+}

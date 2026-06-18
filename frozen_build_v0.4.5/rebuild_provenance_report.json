@@ -1,0 +1,152 @@
+{
+  "report": "M1 ADVANCED — REBUILD PROVENANCE (3-way)",
+  "authority_source": "frozen_hashes_dossier_s3.json (dossier §3, verbatim)",
+  "build_command": "esbuild m1_advanced_browser_entry.js --bundle --format=iife --global-name=M1ADV --target=es2020 --outfile=m1_advanced_bundle.js",
+  "pre_rebuild_utc": "2026-06-17T22:38:48.511Z",
+  "post_rebuild_utc": "2026-06-17T22:38:48.568Z",
+  "comparison_a_pre_vs_dossier": {
+    "all_match": true,
+    "detail": [
+      {
+        "file": "m1_advanced_engine.js",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "m1_advanced_schema.json",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "m1_advanced_storage_adapter.js",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "m1_advanced_tests.js",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "m1_advanced_storage_tests.js",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "m1_advanced_fuzz_tests.js",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "m1_advanced_version_sync_tests.js",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "M1_ADV_FREEZE_RECORD.md",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "M1_ADV_UI_SPEC_v0.4.1.md",
+        "hash_match": true,
+        "bytes_match": true
+      }
+    ]
+  },
+  "comparison_b_post_vs_dossier": {
+    "all_match": true,
+    "detail": [
+      {
+        "file": "m1_advanced_engine.js",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "m1_advanced_schema.json",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "m1_advanced_storage_adapter.js",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "m1_advanced_tests.js",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "m1_advanced_storage_tests.js",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "m1_advanced_fuzz_tests.js",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "m1_advanced_version_sync_tests.js",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "M1_ADV_FREEZE_RECORD.md",
+        "hash_match": true,
+        "bytes_match": true
+      },
+      {
+        "file": "M1_ADV_UI_SPEC_v0.4.1.md",
+        "hash_match": true,
+        "bytes_match": true
+      }
+    ]
+  },
+  "comparison_c_pre_vs_post": {
+    "all_unchanged": true,
+    "detail": [
+      {
+        "file": "m1_advanced_engine.js",
+        "unchanged": true
+      },
+      {
+        "file": "m1_advanced_schema.json",
+        "unchanged": true
+      },
+      {
+        "file": "m1_advanced_storage_adapter.js",
+        "unchanged": true
+      },
+      {
+        "file": "m1_advanced_tests.js",
+        "unchanged": true
+      },
+      {
+        "file": "m1_advanced_storage_tests.js",
+        "unchanged": true
+      },
+      {
+        "file": "m1_advanced_fuzz_tests.js",
+        "unchanged": true
+      },
+      {
+        "file": "m1_advanced_version_sync_tests.js",
+        "unchanged": true
+      },
+      {
+        "file": "M1_ADV_FREEZE_RECORD.md",
+        "unchanged": true
+      },
+      {
+        "file": "M1_ADV_UI_SPEC_v0.4.1.md",
+        "unchanged": true
+      }
+    ]
+  },
+  "bundle_pre_sha256": "9f9a0fe47c8285804268532634593c27539083a811e31e32bf71b33ad5f78ffd",
+  "bundle_post_sha256": "9f9a0fe47c8285804268532634593c27539083a811e31e32bf71b33ad5f78ffd",
+  "bundle_rebuild_bit_identical": true,
+  "overall_pass": true
+}

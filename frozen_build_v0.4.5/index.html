@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>OFTY M1 Advanced (experimental) — Biomechanical context</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   OFTY DESIGN SYSTEM v1 — light only (reused from Tool #1)
+   Layer 1: meta color-scheme. Layer 2: :root color-scheme.
+   Layer 3: forced light tokens + no dark media override.
+   ============================================================ */
+:root {
+  color-scheme: light;
+  --bg:           #F4F6F9;
+  --surface:      #FFFFFF;
+  --surface-2:    #F8FAFC;
+  --border:       #E2E8F0;
+  --border-focus: #1C4F8C;
+
+  --text-1:       #0F172A;
+  --text-2:       #334155;
+  --text-3:       #64748B;
+
+  --accent:       #1C4F8C;
+  --accent-dim:   #EEF4FF;
+  --accent-hover: #163E70;
+  --accent-ring:  rgba(28, 79, 140, 0.18);
+
+  --ok:           #166534;
+  --ok-dim:       #F0FDF4;
+  --ok-border:    #86EFAC;
+
+  --warn:         #92400E;
+  --warn-dim:     #FFFBEB;
+  --warn-border:  #FCD34D;
+
+  --err:          #991B1B;
+  --err-dim:      #FEF2F2;
+  --err-border:   #FCA5A5;
+
+  --accent-border-25: #C2D3EB;
+  --accent-border-20: #CEDEEF;
+
+  --radius-sm:    6px;
+  --radius:       10px;
+  --radius-lg:    14px;
+
+  --shadow-sm:    0 1px 2px rgba(0,0,0,0.06);
+  --shadow:       0 1px 4px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:    0 4px 16px rgba(0,0,0,0.09), 0 2px 4px rgba(0,0,0,0.04);
+}
+/* Layer 3: defeat any UA dark-mode remap */
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: light; }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; background: var(--bg); -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text-1);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+  padding: 24px 16px 96px;
+}
+.mono { font-family: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+.wrap { max-width: 860px; margin: 0 auto; }
+
+/* ---- experimental banner (persistent) ---- */
+.experimental-mark {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--warn); background: var(--warn-dim);
+  border: 1px solid var(--warn-border);
+  padding: 4px 10px; border-radius: 999px;
+}
+header.page { margin-bottom: 20px; }
+header.page h1 { font-size: 1.4rem; font-weight: 600; margin: 12px 0 4px; }
+header.page p.sub { color: var(--text-3); font-size: 0.9rem; }
+
+/* ---- manifest-mismatch banner ---- */
+#manifest_banner {
+  display: none;
+  background: var(--err-dim); border: 1px solid var(--err-border);
+  color: var(--err); border-radius: var(--radius);
+  padding: 14px 16px; margin-bottom: 18px; font-size: 0.9rem;
+}
+#manifest_banner.show { display: block; }
+#manifest_banner strong { display:block; margin-bottom: 4px; }
+#manifest_banner .mono { font-size: 0.8rem; word-break: break-all; }
+
+/* ---- cards / sections ---- */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);
+  padding: 18px 18px; margin-bottom: 16px;
+}
+.section-title {
+  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--text-3); margin-bottom: 12px;
+}
+.step-num {
+  display:inline-block; min-width: 20px; color: var(--accent);
+  font-weight: 600; margin-right: 4px;
+}
+
+/* ---- form ---- */
+label.field { display:block; margin-bottom: 14px; }
+label.field > .lbl { display:block; font-size: 0.85rem; color: var(--text-2); margin-bottom: 5px; font-weight: 500; }
+label.field > .hint { display:block; font-size: 0.76rem; color: var(--text-3); margin-top: 4px; }
+input[type=number], input[type=text], input[type=datetime-local], select, textarea {
+  width: 100%; font-family: inherit; font-size: 0.92rem; color: var(--text-1);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 9px 11px; transition: border-color .15s, box-shadow .15s;
+}
+input.mono { font-family: 'DM Mono', monospace; }
+input:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+.input-invalid {
+  border-color: var(--err) !important;
+  box-shadow: 0 0 0 3px rgba(153,27,27,0.12) !important;
+}
+.grid2 { display:grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+@media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+
+.check { display:flex; align-items:flex-start; gap: 9px; margin-bottom: 11px; }
+.check input[type=checkbox] { width: 18px; height: 18px; margin-top: 1px; accent-color: var(--accent); flex: none; }
+.check .ctext { font-size: 0.86rem; color: var(--text-2); }
+
+/* ---- accordion ---- */
+details.acc { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 14px; background: var(--surface-2); }
+details.acc > summary {
+  cursor: pointer; padding: 11px 14px; font-size: 0.85rem; font-weight: 500;
+  color: var(--text-2); list-style: none; user-select: none;
+}
+details.acc > summary::-webkit-details-marker { display: none; }
+details.acc > summary::before { content: '▸'; margin-right: 8px; color: var(--text-3); }
+details.acc[open] > summary::before { content: '▾'; }
+details.acc > .acc-body { padding: 4px 14px 14px; }
+
+.branch-hidden { display: none !important; }
+
+/* ---- compute button ---- */
+.compute-row { margin-top: 4px; }
+button.compute {
+  width: 100%; font-family: inherit; font-size: 0.98rem; font-weight: 600;
+  color: #fff; background: var(--accent); border: none; cursor: pointer;
+  border-radius: var(--radius); padding: 13px 16px; transition: background .15s;
+}
+button.compute:hover:not(:disabled) { background: var(--accent-hover); }
+button.compute:disabled { background: #9CB3CE; cursor: not-allowed; }
+.compute-helper { font-size: 0.8rem; color: var(--err); margin-top: 8px; min-height: 1em; }
+
+/* ---- result cards ---- */
+#result_region { margin-top: 8px; }
+.result-card { background: var(--surface); border: 1px solid var(--accent-border-25); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 18px; margin-bottom: 16px; }
+.result-head { display:flex; align-items:center; gap:10px; flex-wrap: wrap; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border); }
+.result-head .title { font-size: 0.95rem; font-weight: 600; color: var(--text-1); }
+.rc-block { margin-bottom: 14px; }
+.rc-block h4 { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-3); margin-bottom: 7px; }
+.rc-row { display:flex; justify-content: space-between; gap: 12px; align-items: baseline; padding: 3px 0; font-size: 0.9rem; }
+.rc-row .k { color: var(--text-2); }
+.rc-row .v { color: var(--text-1); font-family: 'DM Mono', monospace; text-align: right; }
+.rc-note { font-size: 0.78rem; color: var(--text-3); margin-top: 2px; }
+.context-only { font-size: 0.76rem; color: var(--text-3); font-style: italic; margin-top: 3px; }
+
+.chip { display:inline-block; font-size: 0.76rem; font-weight: 500; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-2); }
+.chip-row { display:flex; gap: 7px; flex-wrap: wrap; align-items:center; }
+.chip.info { background: var(--accent-dim); border-color: var(--accent-border-20); color: var(--accent); }
+.chip.warn { background: var(--warn-dim); border-color: var(--warn-border); color: var(--warn); }
+.chip[data-tip] { cursor: help; position: relative; border-style: dashed; }
+
+.core-line { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 11px 13px; }
+.core-line .core-label { font-size: 0.76rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.03em; }
+.core-line .core-val { font-family: 'DM Mono', monospace; font-size: 1.05rem; color: var(--text-1); margin-top: 3px; }
+.core-line .core-na { font-size: 0.88rem; color: var(--text-2); margin-top: 3px; }
+
+.flags { margin-top: 6px; }
+.flag { display:flex; gap: 8px; align-items:flex-start; font-size: 0.82rem; padding: 7px 10px; border-radius: var(--radius-sm); margin-bottom: 6px; }
+.flag.info { background: var(--accent-dim); color: var(--text-2); border: 1px solid var(--accent-border-20); }
+.flag.warn { background: var(--warn-dim); color: var(--warn); border: 1px solid var(--warn-border); }
+.flag .ficon { flex: none; font-weight: 600; }
+.flag-scope { font-size: 0.7rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.03em; }
+
+.not-eligible { font-size: 0.84rem; font-weight: 500; color: var(--text-2); background: var(--surface-2); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 9px 12px; margin-top: 12px; }
+
+.subcard { border: 1px solid var(--border); border-radius: var(--radius); padding: 13px; margin-bottom: 12px; background: var(--surface-2); }
+.subcard h3 { font-size: 0.82rem; font-weight: 600; color: var(--text-1); margin-bottom: 9px; }
+.cross-strip { border: 1px solid var(--accent-border-20); background: var(--accent-dim); border-radius: var(--radius); padding: 13px; margin-bottom: 12px; }
+.cross-strip h3 { font-size: 0.82rem; font-weight: 600; color: var(--accent); margin-bottom: 9px; }
+.echo-line { font-size: 0.82rem; color: var(--text-3); margin-bottom: 10px; }
+
+.copy-btn { font-family: inherit; font-size: 0.84rem; font-weight: 500; color: var(--accent); background: var(--surface); border: 1px solid var(--accent-border-25); border-radius: var(--radius-sm); padding: 8px 14px; cursor: pointer; margin-top: 12px; transition: background .15s; }
+.copy-btn:hover { background: var(--accent-dim); }
+.copy-confirm { font-size: 0.78rem; color: var(--ok); margin-left: 10px; }
+
+/* ---- failure card ---- */
+.failure-card { background: var(--err-dim); border: 1px solid var(--err-border); border-radius: var(--radius-lg); padding: 18px; margin-bottom: 16px; }
+.failure-card .fhead { display:flex; align-items:center; gap:8px; font-weight: 600; color: var(--err); font-size: 0.92rem; margin-bottom: 8px; }
+.failure-card .fmsg { color: var(--text-1); font-size: 0.9rem; margin-bottom: 4px; }
+.failure-card .fmeta { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--text-3); margin-bottom: 10px; }
+.failure-card .fremedy { font-size: 0.88rem; color: var(--text-2); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; }
+.failure-card .fremedy b { color: var(--text-1); }
+
+.tip-host { position: relative; display:inline-block; }
+.tip-pop { display:none; position:absolute; z-index: 20; top: 125%; left: 0; min-width: 220px; max-width: 280px; background: var(--text-1); color: #fff; font-size: 0.74rem; line-height: 1.45; padding: 8px 10px; border-radius: var(--radius-sm); box-shadow: var(--shadow-md); white-space: normal; }
+.tip-host:hover .tip-pop, .tip-host:focus-within .tip-pop { display:block; }
+
+footer.foot { text-align:center; color: var(--text-3); font-size: 0.76rem; margin-top: 28px; }
+
+.flag-group { margin-bottom: 10px; }
+.flag-group:last-child { margin-bottom: 0; }
+.flag-group-head { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-3); margin: 4px 0 5px; font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page">
+    <span class="experimental-mark" id="exp_mark_top">● Experimental</span>
+    <h1>OFTY M1 Advanced — Biomechanical context</h1>
+    <p class="sub">ORA / Corvis / Both · decision support only · not validated for autonomous use</p>
+  </header>
+
+  <div id="manifest_banner" role="alert">
+    <strong>⚠ Build manifest mismatch — computation disabled</strong>
+    <span id="manifest_banner_detail" class="mono"></span>
+  </div>
+
+  <!-- ============ INPUT FORM ============ -->
+  <form id="m1form" autocomplete="off" novalidate>
+
+    <!-- Step 1: device branch -->
+    <div class="card">
+      <div class="section-title"><span class="step-num">1</span> Device branch</div>
+      <label class="field">
+        <span class="lbl">Device branch</span>
+        <select id="device_branch">
+          <option value="ora">ORA</option>
+          <option value="corvis">Corvis</option>
+          <option value="both">Both (comparison only)</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Step 2: shared clinical inputs -->
+    <div class="card">
+      <div class="section-title"><span class="step-num">2</span> Shared clinical inputs</div>
+      <div class="grid2">
+        <label class="field">
+          <span class="lbl">GAT IOP (mmHg)</span>
+          <input class="mono" type="number" id="gat_iop" step="0.1" inputmode="decimal">
+        </label>
+        <label class="field">
+          <span class="lbl">CCT (µm)</span>
+          <input class="mono" type="number" id="cct" step="1" inputmode="numeric">
+        </label>
+      </div>
+      <label class="field">
+        <span class="lbl">Eye</span>
+        <select id="eye">
+          <option value="OD">OD (right)</option>
+          <option value="OS">OS (left)</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Step 3: corneal modifiers (accordion, closed) -->
+    <details class="acc" id="acc_modifiers">
+      <summary>Step 3 · Corneal modifiers (optional)</summary>
+      <div class="acc-body">
+        <label class="check" for="keratoconus_ectasia"><input type="checkbox" id="keratoconus_ectasia"><span class="ctext">Keratoconus / ectasia</span></label>
+        <label class="check" for="corneal_edema"><input type="checkbox" id="corneal_edema"><span class="ctext">Corneal edema (acute)</span></label>
+        <label class="check" for="dystrophy_or_scar"><input type="checkbox" id="dystrophy_or_scar"><span class="ctext">Significant dystrophy or scar</span></label>
+        <label class="field" style="margin-top:6px">
+          <span class="lbl">Prior refractive surgery</span>
+          <select id="prior_refractive_surgery">
+            <option value="">— none —</option>
+            <option value="LASIK">LASIK</option>
+            <option value="PRK">PRK</option>
+            <option value="SMILE">SMILE</option>
+            <option value="RK">RK</option>
+            <option value="other">other</option>
+          </select>
+        </label>
+      </div>
+    </details>
+
+    <!-- Step 4: ORA inputs -->
+    <div class="card branch-ora" id="block_ora_inputs">
+      <div class="section-title"><span class="step-num">4</span> ORA inputs</div>
+      <div class="grid2">
+        <label class="field"><span class="lbl">IOPcc (mmHg)</span><input class="mono" type="number" id="ora_iopcc" step="0.1" inputmode="decimal"></label>
+        <label class="field"><span class="lbl">Corneal Hysteresis CH (mmHg)</span><input class="mono" type="number" id="ora_ch" step="0.1" inputmode="decimal"></label>
+        <label class="field"><span class="lbl">Selected waveform score</span><input class="mono" type="number" id="ora_wfs" step="0.1" inputmode="decimal"></label>
+        <label class="field"><span class="lbl">Measurement count</span><input class="mono" type="number" id="ora_count" step="1" inputmode="numeric"></label>
+        <label class="field"><span class="lbl">IOPg (mmHg) <span style="color:var(--text-3)">— optional</span></span><input class="mono" type="number" id="ora_iopg" step="0.1" inputmode="decimal"></label>
+        <label class="field"><span class="lbl">CRF (mmHg) <span style="color:var(--text-3)">— optional</span></span><input class="mono" type="number" id="ora_crf" step="0.1" inputmode="decimal"></label>
+      </div>
+      <label class="check" for="ora_provenance_confirmed"><input type="checkbox" id="ora_provenance_confirmed"><span class="ctext">ORA values are from a single device result (required to compute)</span></label>
+      <div class="grid2">
+        <label class="field"><span class="lbl">Provenance basis</span>
+          <select id="ora_provenance_basis">
+            <option value="single_reading">single_reading</option>
+            <option value="device_averaged_output">device_averaged_output</option>
+          </select>
+        </label>
+        <label class="field"><span class="lbl">Reading ID <span style="color:var(--text-3)">— optional</span></span><input type="text" id="ora_reading_id"></label>
+      </div>
+      <details class="acc" id="acc_ora_meta">
+        <summary>Step 5 · ORA device metadata (optional)</summary>
+        <div class="acc-body grid2">
+          <label class="field"><span class="lbl">Device generation</span>
+            <select id="ora_device_generation">
+              <option value="unknown">unknown</option>
+              <option value="G3">G3</option>
+              <option value="legacy">legacy</option>
+            </select>
+          </label>
+          <label class="field"><span class="lbl">Software version</span><input type="text" id="ora_software_version"></label>
+        </div>
+      </details>
+    </div>
+
+    <!-- Step 4: Corvis inputs -->
+    <div class="card branch-corvis" id="block_corvis_inputs">
+      <div class="section-title"><span class="step-num">4</span> Corvis inputs</div>
+      <div class="grid2">
+        <label class="field"><span class="lbl">bIOP (mmHg)</span><input class="mono" type="number" id="corvis_biop" step="0.1" inputmode="decimal"></label>
+        <label class="field"><span class="lbl">Quality raw label <span style="color:var(--text-3)">— optional</span></span><input type="text" id="corvis_quality_raw" placeholder="e.g. OK / good / bad"></label>
+        <label class="field"><span class="lbl">SSI <span style="color:var(--text-3)">— optional</span></span><input class="mono" type="number" id="corvis_ssi" step="0.1" inputmode="decimal"></label>
+        <label class="field"><span class="lbl">SP-A1 (mmHg/mm) <span style="color:var(--text-3)">— optional</span></span><input class="mono" type="number" id="corvis_sp_a1" step="0.1" inputmode="decimal"></label>
+      </div>
+      <details class="acc" id="acc_corvis_meta">
+        <summary>Step 5 · Corvis device metadata (optional)</summary>
+        <div class="acc-body grid2">
+          <label class="field"><span class="lbl">Software version</span><input type="text" id="corvis_software_version"></label>
+          <label class="field"><span class="lbl">SSI version</span>
+            <select id="corvis_ssi_version"><option value="">—</option><option value="SSI">SSI</option><option value="SSIv2">SSIv2</option></select>
+          </label>
+          <label class="field"><span class="lbl">Reference database</span>
+            <select id="corvis_reference_database"><option value="unknown">unknown</option><option value="untreated">untreated</option><option value="post_LVC">post_LVC</option></select>
+          </label>
+        </div>
+      </details>
+    </div>
+
+    <!-- Step 6: temporal context -->
+    <details class="acc" id="acc_temporal">
+      <summary>Step 6 · Temporal context (optional)</summary>
+      <div class="acc-body">
+        <label class="field">
+          <span class="lbl">Encounter / session ID</span>
+          <input type="text" id="encounter_id">
+          <span class="hint">Use the Encounter ID for records only. To validate a clinical comparison, tick "Same session, confirmed by clinician".</span>
+        </label>
+        <label class="check" for="clinician_confirmation"><input type="checkbox" id="clinician_confirmation"><span class="ctext">Same session, confirmed by clinician</span></label>
+        <div class="grid2">
+          <label class="field"><span class="lbl">GAT timestamp</span><input type="datetime-local" id="gat_timestamp"></label>
+          <label class="field"><span class="lbl">ORA timestamp</span><input type="datetime-local" id="ora_timestamp"></label>
+          <label class="field branch-corvis-inline"><span class="lbl">Corvis timestamp</span><input type="datetime-local" id="corvis_timestamp"></label>
+        </div>
+      </div>
+    </details>
+
+    <!-- Step 6b: clinician-documented preference (Both only) -->
+    <details class="acc branch-both" id="acc_pref">
+      <summary>Clinician-documented preference (Both, optional)</summary>
+      <div class="acc-body">
+        <label class="field"><span class="lbl">Selected source</span>
+          <select id="pref_selected_source">
+            <option value="">—</option>
+            <option value="ORA-IOPcc">ORA-IOPcc</option>
+            <option value="Corvis-bIOP">Corvis-bIOP</option>
+          </select>
+        </label>
+        <label class="field"><span class="lbl">Rationale</span><textarea id="pref_rationale" rows="2"></textarea></label>
+      </div>
+    </details>
+
+    <!-- Step 7: compute -->
+    <div class="card compute-row">
+      <button type="button" class="compute" id="compute_btn">Compute biomechanical context</button>
+      <div class="compute-helper" id="compute_helper" aria-live="polite"></div>
+    </div>
+  </form>
+
+  <!-- ============ RESULT REGION ============ -->
+  <div id="result_region" aria-live="polite"></div>
+
+  <footer class="foot">
+    OFTY M1 Advanced (experimental) · Engine <span id="foot_alg" class="mono"></span> · Schema <span id="foot_schema" class="mono"></span><br>
+    Separate experimental tool · does not write to the Core M1 store.
+  </footer>
+</div>
+
+<!-- frozen bundle: single source of clinical logic (loaded exactly once) -->
+<script src="m1_advanced_bundle.js"></script>
+<script>
+// index.html JS body — erratum-corrected (items 2,3,5,6,7,8,9).
+// This file is concatenated into index.html, not loaded standalone.
+"use strict";
+(function () {
+
+  /* =========================================================
+     0. State + manifest gate
+     ========================================================= */
+  var computeEnabled = false;           // gated by load-time smoke test
+  var manifestPassed = false;
+  var storageAdapter = null;
+  try { storageAdapter = M1ADV.createStorageAdapter(window.localStorage); }
+  catch (e) { storageAdapter = null; }
+
+  // Clinician-documented preference state (item 5)
+  // We keep ONE persistent timestamp here. It updates on every change of
+  // selected_source or rationale, and is the timestamp the engine sees.
+  var preferenceState = { selected_source: null, rationale: null, timestamp: null };
+
+  /* =========================================================
+     1. Read helpers (UI Spec §1.0 — verbatim contract)
+        parseInt / parseFloat are NEVER used here.
+     ========================================================= */
+  function readRequiredNumber(el) {
+    var v = el.valueAsNumber;
+    return Number.isFinite(v) ? v : { uiError: 'required_missing_or_invalid' };
+  }
+  function readOptionalNumber(el) {
+    if (el.value === '' || el.value == null) return null;
+    var v = el.valueAsNumber;
+    return Number.isFinite(v) ? v : { uiError: 'invalid_number' };
+  }
+  function readInteger(el) {
+    var v = el.valueAsNumber;
+    return (Number.isFinite(v) && Number.isInteger(v)) ? v : { uiError: 'integer_required' };
+  }
+  function readTrimmedString(el) {
+    if (el.value == null) return null;
+    var t = String(el.value).trim();
+    return t.length > 0 ? t : null;
+  }
+  function readTimestamp(el) {
+    if (!el.value) return null;
+    var date = new Date(el.value);
+    return Number.isFinite(date.getTime()) ? date.toISOString() : null;
+  }
+  function isUiError(x) { return x && typeof x === 'object' && 'uiError' in x; }
+
+  /* =========================================================
+     2. Formatting contract (UI Spec §7.0 — verbatim)
+     ========================================================= */
+  var fmtPressure = function (n) { return n.toFixed(1) + ' mmHg'; };
+  var fmtSSI = function (n) { return n.toFixed(1); };
+  var fmtSPA1 = function (n) { return n.toFixed(1) + ' mmHg/mm'; };
+  var fmtCCT = function (n) { return Math.round(n) + ' \u00B5m'; };
+  function fmtDelta(n) {
+    if (Math.abs(n) < 0.05) return '+0.0';
+    return (n > 0 ? '+' : '') + n.toFixed(1);
+  }
+
+  /* =========================================================
+     3. Caution-flag table (UI Spec §6.1 — frozen strings)
+     ========================================================= */
+  var FLAG_TABLE = {
+    experimental_module: { severity: 'info', priority: 1, str: 'Experimental module \u2014 clinical decision support only, not validated for autonomous use.' },
+    biomechanics_partially_assessed: { severity: 'info', priority: 2, str: 'Biomechanical context partially assessed for the selected branch.' },
+    post_refractive_surgery_invalid_linear: { severity: 'warn', priority: 3, str: 'Post-refractive surgery: linear CCT correction is not applicable; Core reference omitted.' },
+    post_refractive_surgery_device_interpretation_limited: { severity: 'warn', priority: 4, str: 'Post-refractive surgery: device-specific interpretation is limited.' },
+    keratoconus_altered_biomechanics: { severity: 'warn', priority: 5, str: 'Keratoconus / ectasia: corneal biomechanics altered.' },
+    corneal_edema_acute: { severity: 'warn', priority: 6, str: 'Corneal edema: acute alteration of measurements.' },
+    dystrophy_or_scar_localized: { severity: 'warn', priority: 7, str: 'Localized dystrophy / scar: clinical applicability limited; consider quality and localization.' },
+    ch_out_of_observed_range: { severity: 'info', priority: 8, str: 'Corneal Hysteresis lies outside the 4\u201318 mmHg observed range used by this experimental framework; this is not a validated clinical cutoff.' },
+    quality_unreliable: { severity: 'warn', priority: 9, str: 'Measurement quality is unreliable; repeat measurement recommended.' },
+    quality_low_count: { severity: 'info', priority: 10, str: 'Fewer than 3 ORA measurements: measurement-quality classification capped at acceptable.' },
+    quality_unknown: { severity: 'warn', priority: 11, str: 'Corvis quality label not recognized (corvis-map-0.1 provisional); interpretive confidence indeterminate.' },
+    cross_device_difference: { severity: 'warn', priority: 12, str: 'Cross-device difference exceeds the OFTY design-derived review threshold (>3 mmHg); measurements should not be treated as interchangeable.' },
+    marked_difference_vs_gat: { severity: 'warn', priority: 13, str: 'Difference versus GAT exceeds the OFTY design-derived review threshold (>8 mmHg); verify timing, acquisition and data source.' },
+    temporal_comparison_invalid: { severity: 'info', priority: 14, str: 'Temporal comparison not validated; numerical only.' }
+  };
+
+  /* =========================================================
+     4. Failure remediation (UI Spec §6.2 — frozen)
+     ========================================================= */
+  var REMEDIATION = {
+    INVALID_DEVICE_BRANCH: 'Select a device branch (ORA, Corvis, or Both).',
+    MISSING_REQUIRED_FIELD: 'A required field is missing or invalid. Check eye laterality, corneal modifiers, ORA provenance and required device fields.',
+    BRANCH_BOTH_INCOMPLETE: 'Both-branch requires complete ORA and Corvis inputs. Switch to a single-device branch if only one device is available.',
+    EYE_MISMATCH: 'Eye laterality mismatch between inputs. This module evaluates one eye at a time.',
+    ORA_VALUES_NOT_SAME_RESULT: 'Confirm that the ORA values were taken from a single device result before computing.',
+    OUT_OF_HARD_RANGE: 'Review the numerical inputs and their permitted ranges.',
+    ORA_NO_USABLE_WAVEFORM: 'ORA did not return a usable waveform. Acquire a new reading.',
+    CORVIS_UNREADABLE: 'Corvis reading was not interpretable. Acquire a new reading.',
+    DEVICE_ERROR: 'Device error reported. Repeat the measurement.',
+    CLINICIAN_INVALIDATED: 'Reading invalidated by clinician.'
+  };
+
+  /* =========================================================
+     5. DOM helpers
+     ========================================================= */
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, txt) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (txt != null) e.textContent = txt;
+    return e;
+  }
+
+  /* =========================================================
+     6. Required-field schema per branch (item 2 — gating)
+        Lists only the REQUIRED inputs of the ACTIVE branch.
+        Inactive-branch fields are never checked.
+     ========================================================= */
+  var SHARED_REQUIRED = [
+    { id: 'gat_iop',  kind: 'number' },
+    { id: 'cct',      kind: 'number' }
+  ];
+  var ORA_REQUIRED = [
+    { id: 'ora_iopcc', kind: 'number' },
+    { id: 'ora_ch',    kind: 'number' },
+    { id: 'ora_wfs',   kind: 'number' },
+    { id: 'ora_count', kind: 'integer' }
+    // ora_provenance_confirmed is checked separately
+  ];
+  var CORVIS_REQUIRED = [
+    { id: 'corvis_biop', kind: 'number' }
+  ];
+  function requiredForBranch(branch) {
+    var list = SHARED_REQUIRED.slice();
+    if (branch === 'ora' || branch === 'both') list = list.concat(ORA_REQUIRED);
+    if (branch === 'corvis' || branch === 'both') list = list.concat(CORVIS_REQUIRED);
+    return list;
+  }
+  function fieldOk(spec) {
+    var elm = $(spec.id);
+    if (!elm) return true;
+    var v = elm.valueAsNumber;
+    if (!Number.isFinite(v)) return false;
+    if (spec.kind === 'integer' && !Number.isInteger(v)) return false;
+    return true;
+  }
+
+  /* =========================================================
+     7. Payload builders (UI Spec §1, §2)
+        Only active-branch keys are included.
+     ========================================================= */
+  var fieldErrors = [];   // ids of fields that failed read in last buildPayload
+  function markErr(elm, isErr) {
+    if (!elm) return;
+    if (isErr) elm.classList.add('input-invalid'); else elm.classList.remove('input-invalid');
+  }
+  function reqNum(id) {
+    var elm = $(id); var v = readRequiredNumber(elm);
+    var bad = isUiError(v); markErr(elm, bad); if (bad) fieldErrors.push(id);
+    return bad ? null : v;
+  }
+  function optNum(id) {
+    var elm = $(id); var v = readOptionalNumber(elm);
+    var bad = isUiError(v); markErr(elm, bad); if (bad) fieldErrors.push(id);
+    return bad ? null : v;
+  }
+  function intNum(id) {
+    var elm = $(id); var v = readInteger(elm);
+    var bad = isUiError(v); markErr(elm, bad); if (bad) fieldErrors.push(id);
+    return bad ? null : v;
+  }
+
+  function readShared() {
+    var p = {
+      gat_iop: reqNum('gat_iop'),
+      cct: reqNum('cct'),
+      measurement_identity: { eye: $('eye').value }
+    };
+    p.keratoconus_ectasia = $('keratoconus_ectasia').checked;
+    p.corneal_edema = $('corneal_edema').checked;
+    p.significant_dystrophy_or_scar = $('dystrophy_or_scar').checked;
+    var prs = $('prior_refractive_surgery').value;
+    p.prior_refractive_surgery = prs === '' ? null : prs;
+
+    var eid = readTrimmedString($('encounter_id'));
+    p.measurement_identity.encounter_id = eid;
+    p.shared_encounter_id = null;
+    p.clinician_confirmation = $('clinician_confirmation').checked;
+    p.gat_timestamp = readTimestamp($('gat_timestamp'));
+    p.ora_timestamp = readTimestamp($('ora_timestamp'));
+    p.corvis_timestamp = readTimestamp($('corvis_timestamp'));
+    return p;
+  }
+
+  function readORAInputs() {
+    return {
+      iopcc: reqNum('ora_iopcc'),
+      ch: reqNum('ora_ch'),
+      selected_waveform_score: reqNum('ora_wfs'),
+      measurement_count: intNum('ora_count'),
+      iopg: optNum('ora_iopg'),
+      crf: optNum('ora_crf'),
+      provenance_attestation: {
+        values_from_same_device_result_confirmed: $('ora_provenance_confirmed').checked,
+        basis: $('ora_provenance_basis').value,    // frozen enum: single_reading | device_averaged_output
+        reading_id: readTrimmedString($('ora_reading_id'))
+      }
+    };
+  }
+  function readORAMetadata() {
+    return {
+      device_generation: $('ora_device_generation').value,
+      software_version: readTrimmedString($('ora_software_version'))
+    };
+  }
+  function readCorvisInputs() {
+    return {
+      biop: reqNum('corvis_biop'),
+      corvis_quality_raw: readTrimmedString($('corvis_quality_raw')),
+      ssi: optNum('corvis_ssi'),
+      sp_a1: optNum('corvis_sp_a1')
+    };
+  }
+  function readCorvisMetadata() {
+    var sv = $('corvis_ssi_version').value;
+    return {
+      software_version: readTrimmedString($('corvis_software_version')),
+      ssi_version: sv === '' ? null : sv,
+      reference_database: $('corvis_reference_database').value
+    };
+  }
+
+  // Item 5: clinician preference — REUSES the persistent timestamp at compute
+  function readPreferenceFromState() {
+    var hasSource = preferenceState.selected_source != null && preferenceState.selected_source !== '';
+    var hasRationale = preferenceState.rationale != null && preferenceState.rationale !== '';
+    if (!hasSource && !hasRationale) return null;
+    return {
+      selected_source: hasSource ? preferenceState.selected_source : null,
+      rationale: hasRationale ? preferenceState.rationale : null,
+      timestamp: preferenceState.timestamp   // persistent timestamp, NOT regenerated
+    };
+  }
+
+  function buildPayload(branch) {
+    fieldErrors = [];
+    var p = readShared();
+    p.device_branch = branch;
+    if (branch === 'ora' || branch === 'both') {
+      p.ora_inputs = readORAInputs();
+      p.ora_metadata = readORAMetadata();
+    }
+    if (branch === 'corvis' || branch === 'both') {
+      p.corvis_inputs = readCorvisInputs();
+      p.corvis_metadata = readCorvisMetadata();
+    }
+    if (branch === 'both') {
+      var pref = readPreferenceFromState();
+      if (pref) p.clinician_documented_preference = pref;
+    }
+    return p;
+  }
+
+  /* =========================================================
+     8. Provenance gate + required-field gating (items 2, 3)
+     ========================================================= */
+  function provenanceSatisfied(branch) {
+    if (branch === 'ora' || branch === 'both') {
+      return $('ora_provenance_confirmed').checked;
+    }
+    return true;
+  }
+  function firstInvalidRequiredField(branch) {
+    var list = requiredForBranch(branch);
+    for (var i = 0; i < list.length; i++) {
+      if (!fieldOk(list[i])) return list[i].id;
+    }
+    return null;
+  }
+  function refreshComputeState() {
+    var branch = $('device_branch').value;
+    var helper = $('compute_helper');
+    var btn = $('compute_btn');
+
+    if (!manifestPassed) {
+      btn.disabled = true;
+      helper.textContent = 'Computation disabled: build manifest mismatch.';
+      computeEnabled = false; return;
+    }
+    if (!provenanceSatisfied(branch)) {
+      btn.disabled = true;
+      helper.textContent = 'Confirm ORA same-result attestation';
+      computeEnabled = false; return;
+    }
+    var firstMissing = firstInvalidRequiredField(branch);
+    if (firstMissing) {
+      btn.disabled = true;
+      helper.textContent = 'Required fields are missing or invalid in the active branch.';
+      computeEnabled = false; return;
+    }
+    btn.disabled = false;
+    helper.textContent = '';
+    computeEnabled = true;
+  }
+
+  /* =========================================================
+     9. Render helpers (chips, rows, flags, core)
+     ========================================================= */
+  function chip(text, severity, tip) {
+    if (tip) {
+      var host = el('span', 'tip-host');
+      var c = el('span', 'chip ' + (severity || ''), text);
+      c.setAttribute('tabindex', '0');
+      c.setAttribute('data-tip', '1');
+      host.appendChild(c);
+      var pop = el('span', 'tip-pop', tip);
+      host.appendChild(pop);
+      return host;
+    }
+    return el('span', 'chip ' + (severity || ''), text);
+  }
+  function row(k, v) {
+    var r = el('div', 'rc-row');
+    r.appendChild(el('span', 'k', k));
+    r.appendChild(el('span', 'v', v));
+    return r;
+  }
+
+  // Item 8: REAL grouping by scope, frozen priority order WITHIN each group.
+  // Scope display order (stable): module → ora → corvis → ora_vs_gat →
+  // corvis_vs_gat → cross_device → (any other unknown scope, alphabetical).
+  var SCOPE_ORDER = ['module', 'ora', 'corvis', 'ora_vs_gat', 'corvis_vs_gat', 'cross_device', 'core'];
+  function renderFlags(flags) {
+    if (!flags || !flags.length) return null;
+    var byScope = {};
+    flags.forEach(function (f) {
+      var meta = FLAG_TABLE[f.code] || { severity: 'info', priority: 99, str: f.code };
+      (byScope[f.scope] = byScope[f.scope] || []).push({
+        code: f.code, scope: f.scope,
+        severity: meta.severity, priority: meta.priority, str: meta.str
+      });
+    });
+    var scopes = Object.keys(byScope).sort(function (a, b) {
+      var ia = SCOPE_ORDER.indexOf(a), ib = SCOPE_ORDER.indexOf(b);
+      if (ia === -1 && ib === -1) return a.localeCompare(b);
+      if (ia === -1) return 1;
+      if (ib === -1) return -1;
+      return ia - ib;
+    });
+    var wrap = el('div', 'flags');
+    scopes.forEach(function (sc) {
+      var group = el('div', 'flag-group');
+      group.appendChild(el('div', 'flag-group-head', 'scope: ' + sc));
+      // frozen priority order WITHIN the group
+      byScope[sc].sort(function (a, b) { return a.priority - b.priority; }).forEach(function (f) {
+        var d = el('div', 'flag ' + f.severity);
+        d.appendChild(el('span', 'ficon', f.severity === 'warn' ? '\u26A0' : '\u24D8'));
+        var body = el('div');
+        body.appendChild(el('div', null, f.str));
+        d.appendChild(body);
+        group.appendChild(d);
+      });
+      wrap.appendChild(group);
+    });
+    return wrap;
+  }
+  function coreLine(core) {
+    var box = el('div', 'core-line');
+    box.appendChild(el('div', 'core-label', 'CCT-contextualized Core estimate \u2014 not true IOP'));
+    if (core && core.applicability !== 'not_applicable') {
+      box.appendChild(el('div', 'core-val', fmtPressure(core.display_value_mmhg)));
+    } else {
+      var reason = (core && core.limitation_reason && core.limitation_reason[0]) ? core.limitation_reason[0] : 'not applicable';
+      box.appendChild(el('div', 'core-na', 'Not applicable: ' + reason));
+    }
+    return box;
+  }
+  function notEligible() {
+    return el('div', 'not-eligible', 'Not eligible for target-IOP comparison.');
+  }
+  function expHead(titleText) {
+    var head = el('div', 'result-head');
+    head.appendChild(el('span', 'experimental-mark', '\u25CF Experimental'));
+    head.appendChild(el('span', 'title', titleText));
+    return head;
+  }
+  function applicabilityRows(app) {
+    var wrap = el('div');
+    var cr = el('div', 'chip-row');
+    cr.appendChild(el('span', 'k', 'Clinical applicability'));
+    cr.appendChild(chip(app.level, app.level === 'limited' ? 'warn' : 'info'));
+    wrap.appendChild(cr);
+    if (app.level === 'limited' && app.limitations && app.limitations.length) {
+      app.limitations.forEach(function (lim) { wrap.appendChild(el('div', 'rc-note', '\u2022 ' + lim)); });
+    }
+    return wrap;
+  }
+
+  /* =========================================================
+     10. ORA / Corvis renderers
+     ========================================================= */
+  function renderORA(out) {
+    var r = out.result;
+    var card = el('div', 'result-card');
+    card.appendChild(expHead('ORA biomechanical context'));
+
+    var b1 = el('div', 'rc-block');
+    b1.appendChild(el('h4', null, 'Device measurement'));
+    b1.appendChild(row('IOPcc', fmtPressure(r.device_measurement.value_mmhg)));
+    b1.appendChild(row('vs GAT', '\u0394 ' + fmtDelta(r.comparison_with_gat.delta_mmhg) + ' mmHg'));
+    if (r.comparison_with_gat.comparison_clinically_interpretable === false) {
+      b1.appendChild(el('div', 'rc-note', 'Numerical only \u00B7 clinical comparison not established'));
+    }
+    card.appendChild(b1);
+
+    var b2 = el('div', 'rc-block');
+    var cr = el('div', 'chip-row');
+    cr.appendChild(el('span', 'k', 'Measurement quality'));
+    cr.appendChild(chip(r.measurement_quality.level, 'info'));
+    b2.appendChild(cr);
+    b2.appendChild(applicabilityRows(r.clinical_applicability));
+    var cf = el('div', 'chip-row');
+    cf.appendChild(el('span', 'k', 'Interpretive confidence'));
+    cf.appendChild(chip(r.overall_interpretive_confidence, 'info'));
+    b2.appendChild(cf);
+    card.appendChild(b2);
+
+    if (r.biomechanical_context && r.biomechanical_context.ch_context) {
+      var ch = r.biomechanical_context.ch_context;
+      var b3 = el('div', 'rc-block');
+      b3.appendChild(el('h4', null, 'Biomechanical context'));
+      b3.appendChild(row('Corneal Hysteresis', fmtPressure(ch.value_mmhg)));
+      b3.appendChild(el('div', 'rc-note', ch.interpretation_displayed_to_user));
+      b3.appendChild(el('div', 'context-only', 'Context only \u00B7 not used to modify the pressure value'));
+      card.appendChild(b3);
+    }
+
+    card.appendChild(coreLine(r.core_reference));
+    var f = renderFlags(r.caution_flags); if (f) card.appendChild(f);
+    card.appendChild(notEligible());
+    card.appendChild(copyButton(buildExportORA(out)));
+    return card;
+  }
+
+  function renderCorvis(out) {
+    var r = out.result;
+    var card = el('div', 'result-card');
+    card.appendChild(expHead('Corvis biomechanical context'));
+
+    var b1 = el('div', 'rc-block');
+    b1.appendChild(el('h4', null, 'Device measurement'));
+    b1.appendChild(row('bIOP', fmtPressure(r.device_measurement.value_mmhg)));
+    b1.appendChild(row('vs GAT', '\u0394 ' + fmtDelta(r.comparison_with_gat.delta_mmhg) + ' mmHg'));
+    if (r.comparison_with_gat.comparison_clinically_interpretable === false) {
+      b1.appendChild(el('div', 'rc-note', 'Numerical only \u00B7 clinical comparison not established'));
+    }
+    card.appendChild(b1);
+
+    var b2 = el('div', 'rc-block');
+    var cr = el('div', 'chip-row');
+    cr.appendChild(el('span', 'k', 'Measurement quality'));
+    var rawLabel = r.measurement_quality.raw_device_status;
+    var tip = 'Raw label: ' + (rawLabel == null ? '(none)' : rawLabel) + '\nCorvis quality mapping provisional (corvis-map-0.1)';
+    cr.appendChild(chip(r.measurement_quality.level, r.measurement_quality.level === 'unknown' ? 'warn' : 'info', tip));
+    b2.appendChild(cr);
+    b2.appendChild(applicabilityRows(r.clinical_applicability));
+    var cf = el('div', 'chip-row');
+    cf.appendChild(el('span', 'k', 'Interpretive confidence'));
+    cf.appendChild(chip(r.overall_interpretive_confidence, 'info'));
+    b2.appendChild(cf);
+    card.appendChild(b2);
+
+    var abp = r.biomechanical_context ? r.biomechanical_context.additional_biomechanical_parameters : null;
+    if (abp) {
+      var b3 = el('div', 'rc-block');
+      b3.appendChild(el('h4', null, 'Additional biomechanical parameters'));
+      if (abp.ssi != null) b3.appendChild(row('SSI', fmtSSI(abp.ssi)));
+      if (abp.sp_a1 != null) b3.appendChild(row('SP-A1', fmtSPA1(abp.sp_a1)));
+      b3.appendChild(row('Reference', abp.reference));
+      b3.appendChild(el('div', 'context-only', 'Context only \u00B7 not used to modify the pressure value'));
+      card.appendChild(b3);
+    }
+
+    card.appendChild(coreLine(r.core_reference));
+    var f = renderFlags(r.caution_flags); if (f) card.appendChild(f);
+    card.appendChild(notEligible());
+    card.appendChild(copyButton(buildExportCorvis(out)));
+    return card;
+  }
+
+  /* =========================================================
+     11. Both renderer (item 7: Reference + rationale)
+     ========================================================= */
+  function renderBoth(out) {
+    var r = out.result;
+    var card = el('div', 'result-card');
+    card.appendChild(expHead('ORA vs Corvis (comparison only)'));
+    card.appendChild(el('div', 'echo-line', 'Measured GAT IOP: ' + fmtPressure(r.inputs.gat_iop) + ' (echo only, not a result)'));
+
+    // ORA sub-card
+    var oa = r.branch_assessments.ora;
+    var sub1 = el('div', 'subcard');
+    sub1.appendChild(el('h3', null, 'ORA assessment'));
+    sub1.appendChild(row('IOPcc', fmtPressure(oa.value_mmhg)));
+    var ocr = el('div', 'chip-row');
+    ocr.appendChild(chip('quality: ' + oa.measurement_quality.level, 'info'));
+    ocr.appendChild(chip('applicability: ' + oa.clinical_applicability.level, 'info'));
+    ocr.appendChild(chip('confidence: ' + oa.overall_interpretive_confidence, 'info'));
+    sub1.appendChild(ocr);
+    if (oa.biomechanical_context && oa.biomechanical_context.ch_context) {
+      var och = oa.biomechanical_context.ch_context;
+      sub1.appendChild(row('Corneal Hysteresis', fmtPressure(och.value_mmhg)));
+      sub1.appendChild(el('div', 'rc-note', och.interpretation_displayed_to_user));
+      sub1.appendChild(el('div', 'context-only', 'Context only \u00B7 not used to modify the pressure value'));
+    }
+    card.appendChild(sub1);
+
+    // Corvis sub-card
+    var ca = r.branch_assessments.corvis;
+    var sub2 = el('div', 'subcard');
+    sub2.appendChild(el('h3', null, 'Corvis assessment'));
+    sub2.appendChild(row('bIOP', fmtPressure(ca.value_mmhg)));
+    var ccr = el('div', 'chip-row');
+    var craw = ca.measurement_quality.raw_device_status;
+    var ctip = 'Raw label: ' + (craw == null ? '(none)' : craw) + '\nCorvis quality mapping provisional (corvis-map-0.1)';
+    ccr.appendChild(chip('quality: ' + ca.measurement_quality.level, ca.measurement_quality.level === 'unknown' ? 'warn' : 'info', ctip));
+    ccr.appendChild(chip('applicability: ' + ca.clinical_applicability.level, 'info'));
+    ccr.appendChild(chip('confidence: ' + ca.overall_interpretive_confidence, 'info'));
+    sub2.appendChild(ccr);
+    var cabp = ca.biomechanical_context ? ca.biomechanical_context.additional_biomechanical_parameters : null;
+    if (cabp) {
+      if (cabp.ssi != null) sub2.appendChild(row('SSI', fmtSSI(cabp.ssi)));
+      if (cabp.sp_a1 != null) sub2.appendChild(row('SP-A1', fmtSPA1(cabp.sp_a1)));
+      // Item 7: show Reference for Corvis params in Both card too
+      sub2.appendChild(row('Reference', cabp.reference));
+      sub2.appendChild(el('div', 'context-only', 'Context only \u00B7 not used to modify the pressure value'));
+    }
+    card.appendChild(sub2);
+
+    // Cross-device strip
+    var dc = r.device_comparison;
+    var strip = el('div', 'cross-strip');
+    strip.appendChild(el('h3', null, 'Cross-device comparison'));
+    strip.appendChild(row('Absolute difference', fmtPressure(dc.absolute_difference_mmhg)));
+    strip.appendChild(el('div', 'rc-note', dc.interpretation));
+    var comp = dc.comparability;
+    strip.appendChild(row('Comparability',
+      'gat\u00B7ora ' + (comp.gat_vs_ora ? '\u2713' : '\u2717') +
+      ' \u00B7 gat\u00B7corvis ' + (comp.gat_vs_corvis ? '\u2713' : '\u2717') +
+      ' \u00B7 ora\u00B7corvis ' + (comp.ora_vs_corvis ? '\u2713' : '\u2717')));
+    strip.appendChild(row('Cross-device interpretability', dc.cross_device_comparison_interpretability));
+    card.appendChild(strip);
+
+    // Item 7: clinician-documented preference (recorded-only)
+    if (r.clinician_documented_preference) {
+      var pref = el('div', 'subcard');
+      pref.appendChild(el('h3', null, 'Clinician-documented preference'));
+      if (r.clinician_documented_preference.selected_source) {
+        pref.appendChild(row('Selected', r.clinician_documented_preference.selected_source));
+      }
+      if (r.clinician_documented_preference.rationale) {
+        var rWrap = el('div');
+        rWrap.appendChild(el('div', 'rc-row', '')); // spacer
+        var k = el('div', 'rc-block');
+        k.appendChild(el('h4', null, 'Rationale'));
+        k.appendChild(el('div', 'rc-note', r.clinician_documented_preference.rationale));
+        pref.appendChild(k);
+      }
+      pref.appendChild(el('div', 'rc-note', 'Recorded only \u2014 not exported as primary'));
+      card.appendChild(pref);
+    }
+
+    card.appendChild(coreLine(r.core_reference));
+    var f = renderFlags(r.caution_flags); if (f) card.appendChild(f);
+    card.appendChild(notEligible());
+    card.appendChild(copyButton(buildExportBoth(out)));
+    return card;
+  }
+
+  function renderFailure(out) {
+    var card = el('div', 'failure-card');
+    var head = el('div', 'result-head');
+    head.appendChild(el('span', 'experimental-mark', '\u25CF Experimental'));
+    head.appendChild(el('span', 'title', 'No interpretable result'));
+    card.appendChild(head);
+
+    var typ = out.failure.type === 'validation_error' ? 'Input validation' : 'Measurement failure';
+    var fh = el('div', 'fhead');
+    fh.appendChild(el('span', null, '\u26A0 ' + typ));
+    fh.setAttribute('tabindex', '-1');
+    card.appendChild(fh);
+    card._focusTarget = fh;
+
+    card.appendChild(el('div', 'fmsg', out.failure.message));
+    card.appendChild(el('div', 'fmeta', 'Code: ' + out.failure.code + ' \u00B7 Engine ' + out.algorithm_version + ' \u00B7 Schema ' + out.schema_version));
+
+    var remedy = el('div', 'fremedy');
+    remedy.appendChild(el('b', null, 'What to do: '));
+    remedy.appendChild(document.createTextNode(REMEDIATION[out.failure.code] || 'Review the inputs and try again.'));
+    card.appendChild(remedy);
+    return card;
+  }
+
+  /* =========================================================
+     12. Export builders (UI Spec §7)
+     ========================================================= */
+  function coreExportLine(core) {
+    if (core && core.applicability === 'not_applicable') {
+      var reason = (core.limitation_reason && core.limitation_reason[0]) ? core.limitation_reason[0] : 'not applicable';
+      return 'CCT-contextualized Core estimate \u2014 not true IOP: not applicable (' + reason + ')';
+    }
+    return 'CCT-contextualized Core estimate \u2014 not true IOP: ' + fmtPressure(core.display_value_mmhg);
+  }
+  function buildExportORA(out) {
+    var r = out.result, lines = [];
+    lines.push('OFTY M1 Advanced (experimental) \u2014 ORA');
+    lines.push('Eye: ' + r.measurement_identity.eye);
+    lines.push('GAT IOP: ' + fmtPressure(r.inputs.gat_iop) + ' | CCT: ' + fmtCCT(r.inputs.cct));
+    var dline = 'IOPcc: ' + fmtPressure(r.device_measurement.value_mmhg) + ' (\u0394 vs GAT ' + fmtDelta(r.comparison_with_gat.delta_mmhg);
+    dline += r.comparison_with_gat.comparison_clinically_interpretable === false
+      ? ', numerical only \u00B7 clinical comparison not established)' : ')';
+    lines.push(dline);
+    if (r.biomechanical_context && r.biomechanical_context.ch_context) {
+      lines.push('Corneal Hysteresis: ' + fmtPressure(r.biomechanical_context.ch_context.value_mmhg) + ' (prognostic context; does not modify pressure)');
+    }
+    lines.push('Measurement quality: ' + r.measurement_quality.level + ' \u00B7 Applicability: ' + r.clinical_applicability.level + ' \u00B7 Confidence: ' + r.overall_interpretive_confidence);
+    lines.push(coreExportLine(r.core_reference));
+    lines.push('Not eligible for target-IOP comparison.');
+    lines.push('Generated with OFTY M1 Advanced ' + r.algorithm_version);
+    return lines.join('\n');
+  }
+  function buildExportCorvis(out) {
+    var r = out.result, lines = [];
+    lines.push('OFTY M1 Advanced (experimental) \u2014 Corvis');
+    lines.push('Eye: ' + r.measurement_identity.eye);
+    lines.push('GAT IOP: ' + fmtPressure(r.inputs.gat_iop) + ' | CCT: ' + fmtCCT(r.inputs.cct));
+    var dline = 'Corvis bIOP: ' + fmtPressure(r.device_measurement.value_mmhg) + ' (\u0394 vs GAT ' + fmtDelta(r.comparison_with_gat.delta_mmhg);
+    dline += r.comparison_with_gat.comparison_clinically_interpretable === false
+      ? ', numerical only \u00B7 clinical comparison not established)' : ')';
+    lines.push(dline);
+    lines.push('Measurement quality: ' + r.measurement_quality.level + ' \u00B7 Applicability: ' + r.clinical_applicability.level + ' \u00B7 Confidence: ' + r.overall_interpretive_confidence);
+    var abp = r.biomechanical_context ? r.biomechanical_context.additional_biomechanical_parameters : null;
+    if (abp && abp.ssi != null) lines.push('SSI: ' + fmtSSI(abp.ssi) + ' (context only)');
+    if (abp && abp.sp_a1 != null) lines.push('SP-A1: ' + fmtSPA1(abp.sp_a1) + ' (context only)');
+    lines.push(coreExportLine(r.core_reference));
+    lines.push('Not eligible for target-IOP comparison.');
+    lines.push('Generated with OFTY M1 Advanced ' + r.algorithm_version);
+    return lines.join('\n');
+  }
+  function buildExportBoth(out) {
+    var r = out.result, lines = [];
+    lines.push('OFTY M1 Advanced (experimental) \u2014 ORA vs Corvis');
+    lines.push('Eye: ' + r.measurement_identity.eye);
+    lines.push('Measured GAT IOP: ' + fmtPressure(r.inputs.gat_iop) + ' | CCT: ' + fmtCCT(r.inputs.cct));
+    lines.push('ORA IOPcc: ' + fmtPressure(r.branch_assessments.ora.value_mmhg));
+    lines.push('Corvis bIOP: ' + fmtPressure(r.branch_assessments.corvis.value_mmhg));
+    lines.push('Cross-device difference: ' + fmtPressure(r.device_comparison.absolute_difference_mmhg));
+    lines.push(r.device_comparison.interpretation);
+    lines.push(coreExportLine(r.core_reference));
+    lines.push('Not eligible for target-IOP comparison.');
+    lines.push('Generated with OFTY M1 Advanced ' + r.algorithm_version);
+    // Item 7 reaffirmed: preference NOT included in the export (recorded only).
+    return lines.join('\n');
+  }
+
+  function copyButton(text) {
+    var wrap = el('div');
+    var btn = el('button', 'copy-btn', 'Copy');
+    btn.type = 'button';
+    var confirm = el('span', 'copy-confirm');
+    btn.addEventListener('click', function () {
+      function done() { confirm.textContent = 'Copied'; setTimeout(function () { confirm.textContent = ''; }, 1600); }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+      } else { fallbackCopy(text); done(); }
+    });
+    wrap.appendChild(btn); wrap.appendChild(confirm);
+    return wrap;
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  /* =========================================================
+     13. Compute orchestration (item 3: focus first invalid)
+     ========================================================= */
+  function clearResult() { $('result_region').innerHTML = ''; }
+
+  function runCompute() {
+    var branch = $('device_branch').value;
+    clearResult();   // U11: clear previous result before anything new
+    fieldErrors = [];
+    var payload = buildPayload(branch);
+
+    if (fieldErrors.length > 0) {
+      $('compute_helper').textContent = 'Some required fields are missing or invalid.';
+      // item 3: focus the first invalid field (always reachable, regardless of gate)
+      var firstBad = $(fieldErrors[0]);
+      if (firstBad && typeof firstBad.focus === 'function') firstBad.focus();
+      return;
+    }
+    if (!computeEnabled) {
+      // gate said no for a non-field reason (manifest mismatch, provenance) — surface helper
+      return;
+    }
+    $('compute_helper').textContent = '';
+
+    var out;
+    try { out = M1ADV.computeM1Advanced(payload); }
+    catch (e) {
+      var errCard = el('div', 'failure-card');
+      errCard.appendChild(el('div', 'fhead', '\u26A0 Engine error'));
+      errCard.appendChild(el('div', 'fmsg', String(e && e.message ? e.message : e)));
+      $('result_region').appendChild(errCard);
+      return;
+    }
+
+    if (storageAdapter) {
+      try { storageAdapter.persistAdvancedResult(out); } catch (e) {}
+    }
+
+    if (out.status === 'failure') {
+      var fcard = renderFailure(out);
+      $('result_region').appendChild(fcard);
+      if (fcard._focusTarget) fcard._focusTarget.focus();
+      return;
+    }
+
+    var card;
+    if (branch === 'ora') card = renderORA(out);
+    else if (branch === 'corvis') card = renderCorvis(out);
+    else card = renderBoth(out);
+    $('result_region').appendChild(card);
+  }
+
+  /* =========================================================
+     14. Progressive disclosure (item 6: temporal open only on Both)
+     ========================================================= */
+  function applyBranchVisibility() {
+    var branch = $('device_branch').value;
+    var showORA = (branch === 'ora' || branch === 'both');
+    var showCorvis = (branch === 'corvis' || branch === 'both');
+    $('block_ora_inputs').classList.toggle('branch-hidden', !showORA);
+    $('block_corvis_inputs').classList.toggle('branch-hidden', !showCorvis);
+    $('acc_pref').classList.toggle('branch-hidden', branch !== 'both');
+    var ctsWrap = document.querySelector('.branch-corvis-inline');
+    if (ctsWrap) ctsWrap.classList.toggle('branch-hidden', !showCorvis);
+
+    // Item 6: Both opens temporal; ORA/Corvis closes it even after coming from Both.
+    $('acc_temporal').open = (branch === 'both');
+
+    refreshComputeState();
+  }
+
+  /* =========================================================
+     15. Clinician preference state binding (item 5)
+     ========================================================= */
+  function updatePreferenceTimestamp() {
+    preferenceState.timestamp = new Date().toISOString();
+  }
+  function bindPreference() {
+    var src = $('pref_selected_source'), rat = $('pref_rationale');
+    function onPrefChange() {
+      preferenceState.selected_source = src.value === '' ? null : src.value;
+      var t = rat.value == null ? '' : String(rat.value).trim();
+      preferenceState.rationale = t.length > 0 ? t : null;
+      updatePreferenceTimestamp();
+    }
+    src.addEventListener('change', onPrefChange);
+    rat.addEventListener('input', onPrefChange);
+  }
+
+  /* =========================================================
+     16. Load-time version + HASH smoke test (item 9)
+        Compares:
+          (a) M1ADV.CONSTANTS.ALG_VERSION    vs manifest.engine_algorithm_version
+          (b) M1ADV.CONSTANTS.SCHEMA_VERSION vs manifest.schema_version
+          (c) SHA-256(m1_advanced_bundle.js) vs manifest.sha256.m1_advanced_bundle.js.hash
+          (d) SHA-256(m1_advanced_schema.json) vs manifest.sha256.m1_advanced_schema.json.hash
+          (e) schema.$id vs manifest.schema_version vs M1ADV.CONSTANTS.SCHEMA_VERSION
+        ANY mismatch → banner + compute blocked.
+     ========================================================= */
+  function sha256Hex(buf) {
+    return crypto.subtle.digest('SHA-256', buf).then(function (hash) {
+      var bytes = new Uint8Array(hash);
+      var s = '';
+      for (var i = 0; i < bytes.length; i++) {
+        var h = bytes[i].toString(16);
+        if (h.length < 2) h = '0' + h;
+        s += h;
+      }
+      return s;
+    });
+  }
+  function fetchBuf(url) {
+    return fetch(url, { cache: 'no-store' })
+      .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status + ' for ' + url); return res.arrayBuffer(); });
+  }
+  function runManifestSmokeTest() {
+    var manifest, schemaObj;
+    return fetch('build.manifest.json', { cache: 'no-store' })
+      .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status + ' for build.manifest.json'); return res.json(); })
+      .then(function (m) { manifest = m; return fetchBuf('m1_advanced_bundle.js'); })
+      .then(function (bundleBuf) {
+        return sha256Hex(bundleBuf).then(function (bundleHash) {
+          return fetchBuf('m1_advanced_schema.json').then(function (schemaBuf) {
+            return sha256Hex(schemaBuf).then(function (schemaHash) {
+              // also parse schema for $id
+              var schemaText = new TextDecoder('utf-8').decode(schemaBuf);
+              try { schemaObj = JSON.parse(schemaText); } catch (e) { schemaObj = {}; }
+              return { bundleHash: bundleHash, schemaHash: schemaHash };
+            });
+          });
+        });
+      })
+      .then(function (hashes) {
+        var mismatches = [];
+        if (M1ADV.CONSTANTS.ALG_VERSION !== manifest.engine_algorithm_version)
+          mismatches.push('ALG_VERSION ' + M1ADV.CONSTANTS.ALG_VERSION + ' \u2260 manifest ' + manifest.engine_algorithm_version);
+        if (M1ADV.CONSTANTS.SCHEMA_VERSION !== manifest.schema_version)
+          mismatches.push('SCHEMA_VERSION ' + M1ADV.CONSTANTS.SCHEMA_VERSION + ' \u2260 manifest ' + manifest.schema_version);
+        var manifestBundleHash = manifest.sha256 && manifest.sha256['m1_advanced_bundle.js'] && manifest.sha256['m1_advanced_bundle.js'].hash;
+        var manifestSchemaHash = manifest.sha256 && manifest.sha256['m1_advanced_schema.json'] && manifest.sha256['m1_advanced_schema.json'].hash;
+        if (!manifestBundleHash || hashes.bundleHash !== manifestBundleHash)
+          mismatches.push('bundle SHA-256 ' + hashes.bundleHash.slice(0,12) + '\u2026 \u2260 manifest ' + (manifestBundleHash ? manifestBundleHash.slice(0,12) + '\u2026' : '(absent)'));
+        if (!manifestSchemaHash || hashes.schemaHash !== manifestSchemaHash)
+          mismatches.push('schema SHA-256 ' + hashes.schemaHash.slice(0,12) + '\u2026 \u2260 manifest ' + (manifestSchemaHash ? manifestSchemaHash.slice(0,12) + '\u2026' : '(absent)'));
+        var schemaId = schemaObj && schemaObj.$id;
+        if (!schemaId || schemaId !== manifest.schema_version)
+          mismatches.push('schema $id ' + String(schemaId) + ' \u2260 manifest.schema_version ' + manifest.schema_version);
+        if (!schemaId || schemaId !== M1ADV.CONSTANTS.SCHEMA_VERSION)
+          mismatches.push('schema $id ' + String(schemaId) + ' \u2260 M1ADV.CONSTANTS.SCHEMA_VERSION ' + M1ADV.CONSTANTS.SCHEMA_VERSION);
+
+        if (mismatches.length === 0) {
+          manifestPassed = true;
+        } else {
+          manifestPassed = false;
+          showManifestBanner(mismatches.join(' \u00B7 '));
+        }
+      })
+      .catch(function (e) {
+        manifestPassed = false;
+        showManifestBanner('Smoke test could not complete (' + e.message + '). Computation disabled as a safety default.');
+      })
+      .then(function () { refreshComputeState(); });
+  }
+  function showManifestBanner(detail) {
+    $('manifest_banner_detail').textContent = detail;
+    $('manifest_banner').classList.add('show');
+  }
+
+  /* =========================================================
+     17. Wire up — including live required-field gating on input/change
+     ========================================================= */
+  function attachLiveGating() {
+    // Branch switching
+    $('device_branch').addEventListener('change', applyBranchVisibility);
+    // Provenance affects gate
+    $('ora_provenance_confirmed').addEventListener('change', refreshComputeState);
+    // Live required-field gating: any input/change in any field re-evaluates.
+    // We attach to the whole form so newly-revealed branch fields are covered.
+    var form = document.getElementById('m1form');
+    form.addEventListener('input', refreshComputeState);
+    form.addEventListener('change', refreshComputeState);
+    $('compute_btn').addEventListener('click', runCompute);
+  }
+  function init() {
+    $('foot_alg').textContent = M1ADV.CONSTANTS.ALG_VERSION;
+    $('foot_schema').textContent = M1ADV.CONSTANTS.SCHEMA_VERSION;
+    bindPreference();
+    attachLiveGating();
+    applyBranchVisibility();
+    refreshComputeState();
+    runManifestSmokeTest();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else { init(); }
+})();
+</script>
+</body>
+</html>

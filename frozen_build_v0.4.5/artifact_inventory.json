@@ -1,0 +1,312 @@
+{
+  "report": "M1 ADVANCED — FINAL ARTIFACT INVENTORY",
+  "freeze_version": "v0.4.1 (UI) / v0.4.5 (build freeze)",
+  "status": "TECHNICALLY VERIFIED; Founder sign-off SIGNED 2026-06-18T11:59:31Z",
+  "generated_at": "2026-06-18T12:21:19.765Z",
+  "total_files": 50,
+  "frozen_count": 16,
+  "frozen_set_definition": "clinical core (engine, schema, adapter, browser_entry, bundle, manifest) + frozen test sources (4) + frozen test reports (4) + frozen docs (spec, build freeze record)",
+  "note": "This inventory is the single authoritative source for full SHA-256 of every artifact, including M1_ADV_CONSOLIDATED_ARTIFACT_INDEX.md. The index does not embed this inventory hash (circular-reference avoidance).",
+  "artifacts": [
+    {
+      "path": "M1_ADV_CONSOLIDATED_ARTIFACT_INDEX.md",
+      "bytes": 7493,
+      "sha256": "8c8d7d4322630ed54ecc4b7e3cdf3eb53d81ada3b2b794138992b26c52614a99",
+      "frozen": false
+    },
+    {
+      "path": "M1_ADV_FINAL_AUDIT_REPORT.md",
+      "bytes": 8511,
+      "sha256": "bee552efd67fe210313b4be9a9f35ddff157b63b74dd0dd47c0668375adb8b4e",
+      "frozen": false
+    },
+    {
+      "path": "M1_ADV_FINAL_TECHNICAL_FREEZE_RECORD.md",
+      "bytes": 6613,
+      "sha256": "401936786f6365df2379367b37d37c21e0b44f485183d7fa33993a5f8db547ce",
+      "frozen": false
+    },
+    {
+      "path": "M1_ADV_FREEZE_RECORD.md",
+      "bytes": 9548,
+      "sha256": "91a3aed3ae2aa660165139ac1e6446dc6c3dc155a4424daebe868d542bf98f19",
+      "frozen": true
+    },
+    {
+      "path": "M1_ADV_UI_SPEC_v0.4.1.md",
+      "bytes": 36695,
+      "sha256": "7e954920da441098b5fe9d82cf4e5383fb58b049ed54bbfd07515a14a06dd451",
+      "frozen": true
+    },
+    {
+      "path": "acceptance_screenshots/U16_both_no_primary.png",
+      "bytes": 227230,
+      "sha256": "ec5ddce49c67ad34d0de060e82e3ad7f588c64e5387448d0ce5891ad4bd15570",
+      "frozen": false
+    },
+    {
+      "path": "acceptance_screenshots/U19_responsive_320.png",
+      "bytes": 232944,
+      "sha256": "94d02585a827c45d02e8756f626206c6df6fb25b658cf8606b11059b02a80459",
+      "frozen": false
+    },
+    {
+      "path": "acceptance_screenshots/U1_ora_success.png",
+      "bytes": 160051,
+      "sha256": "c45f97fa26299aa56a72c4203678735d997ccd3a0690cd716dc31286994637bb",
+      "frozen": false
+    },
+    {
+      "path": "acceptance_screenshots/U2_ch_out_of_range.png",
+      "bytes": 168288,
+      "sha256": "a3e27a42ad2645b0db21f3afbf636961d415250dffb68acaeb2ca1280bf7948a",
+      "frozen": false
+    },
+    {
+      "path": "acceptance_screenshots/U3_corvis_unknown.png",
+      "bytes": 152707,
+      "sha256": "92b97a98433827f1555e8aa52f30b0252c7589c52957f9955f9482180f597908",
+      "frozen": false
+    },
+    {
+      "path": "acceptance_screenshots/U5_both_unconfirmed.png",
+      "bytes": 223573,
+      "sha256": "ead1d7f74a2efff4207c4fbcf5c866e914b2cb32220bdf29e042cc920652b7cd",
+      "frozen": false
+    },
+    {
+      "path": "acceptance_screenshots/U6_lasik.png",
+      "bytes": 194970,
+      "sha256": "73e3c54c6e49d0d3f60eee2bde5f9a3b5b5edbcadae4701daae4c70dfe5b4664",
+      "frozen": false
+    },
+    {
+      "path": "acceptance_screenshots/U7_measurement_failure.png",
+      "bytes": 120328,
+      "sha256": "ccedf7226e2d30d2ac4e857eb5b44ad73db7dde422d52510312ea42150f04f52",
+      "frozen": false
+    },
+    {
+      "path": "browser_smoke.js",
+      "bytes": 18574,
+      "sha256": "75654b12052650af3c073186e88657b9fdcff20a0129431e8467d4401f3396ea",
+      "frozen": false
+    },
+    {
+      "path": "browser_smoke_report.json",
+      "bytes": 3960,
+      "sha256": "6869b41b0c6168498c4506154d50b0c8ca4452d632591c26fd11d413a17483a9",
+      "frozen": false
+    },
+    {
+      "path": "build.manifest.json",
+      "bytes": 3849,
+      "sha256": "419766a2cbf0da44f5547729d2a8149dae762425f5765172a6af4cdeaaa760d2",
+      "frozen": true
+    },
+    {
+      "path": "clean_room_gate_report.json",
+      "bytes": 1013,
+      "sha256": "4e9ed2338947e2b62f82be8f886a99459b13ecbbf81d8119d50137139026c3cb",
+      "frozen": false
+    },
+    {
+      "path": "frozen_hashes_dossier_s3.json",
+      "bytes": 1362,
+      "sha256": "92f2fb52c62d20a6703fe062ba92c14ab1f25236535700fb407cf4bb31e1f56c",
+      "frozen": false
+    },
+    {
+      "path": "frozen_immutability_report.json",
+      "bytes": 3596,
+      "sha256": "a6ab758de6839294aa29d875df99234db1be1dd75ecdf605d73c5813dc52bff1",
+      "frozen": false
+    },
+    {
+      "path": "frozen_snapshot_post_rebuild.json",
+      "bytes": 1483,
+      "sha256": "691d8087ea261d305aeee6aa74d692d2d621f2274259584c927a29f5178447b4",
+      "frozen": false
+    },
+    {
+      "path": "frozen_snapshot_pre_rebuild.json",
+      "bytes": 1482,
+      "sha256": "71a1fcfd5d547d005545fe3b28b79d51e9788baed38c1e987dfadb37da3314fd",
+      "frozen": false
+    },
+    {
+      "path": "index.html",
+      "bytes": 63627,
+      "sha256": "3e3f4d0bf66715b4ee0b3bdd01cc19aa16d372129da50962b97b8f3406e5e7e8",
+      "frozen": false
+    },
+    {
+      "path": "m1_advanced_acceptance.js",
+      "bytes": 50754,
+      "sha256": "e15ebba468052014a2ca31b4c453ef62f429eb5dae6d6a1bf26b278f1dbde1ed",
+      "frozen": false
+    },
+    {
+      "path": "m1_advanced_acceptance_console.log",
+      "bytes": 3094,
+      "sha256": "9eae1c2c705246804c082b7bae9ca0a4edde25a7b9addd75e5db30168a7cc839",
+      "frozen": false
+    },
+    {
+      "path": "m1_advanced_browser_acceptance_report.json",
+      "bytes": 14459,
+      "sha256": "b952f087fe6f6af45bc0041a58bbf04e730f374e9e854010cddc95e4a4fef4d2",
+      "frozen": false
+    },
+    {
+      "path": "m1_advanced_browser_acceptance_report.md",
+      "bytes": 12117,
+      "sha256": "e61e54badc7f9bf2794839e3cd4c3ba989bf99b06a4b38e6832b87bd07899f59",
+      "frozen": false
+    },
+    {
+      "path": "m1_advanced_browser_entry.js",
+      "bytes": 1088,
+      "sha256": "35397884a21e94871f0d2e0b404a6038e234d6166799e733f94109dd47669892",
+      "frozen": true
+    },
+    {
+      "path": "m1_advanced_bundle.js",
+      "bytes": 380042,
+      "sha256": "9f9a0fe47c8285804268532634593c27539083a811e31e32bf71b33ad5f78ffd",
+      "frozen": true
+    },
+    {
+      "path": "m1_advanced_engine.js",
+      "bytes": 42816,
+      "sha256": "1fef6cb46ef014c00cf6326f4ea6bf3f307911ea1658fed05123fd3c03cae63a",
+      "frozen": true
+    },
+    {
+      "path": "m1_advanced_fuzz_report.json",
+      "bytes": 209,
+      "sha256": "c1c7a2d54ecaaf74baa1e29e3562452d64cca8cf8dbcae9e1d2583c2bf0d4ed6",
+      "frozen": true
+    },
+    {
+      "path": "m1_advanced_fuzz_tests.js",
+      "bytes": 5200,
+      "sha256": "0c1310a6e595d6426bc4eed181c47aab306f025fd2ea27ea55d64675ca3b2884",
+      "frozen": true
+    },
+    {
+      "path": "m1_advanced_schema.json",
+      "bytes": 26052,
+      "sha256": "fbd983b1a443a1700402cf65ed9537c4279394747250547504260690b4a89d06",
+      "frozen": true
+    },
+    {
+      "path": "m1_advanced_storage_adapter.js",
+      "bytes": 3656,
+      "sha256": "d282045f73641342ce0b6a416399ad61a2db34719bb1437f13068284ea83fe87",
+      "frozen": true
+    },
+    {
+      "path": "m1_advanced_storage_test_report.json",
+      "bytes": 192,
+      "sha256": "5bceffb5356dccc2757b7016efa6124d9e787e1f3a7791a687f2fc53af64a99e",
+      "frozen": true
+    },
+    {
+      "path": "m1_advanced_storage_tests.js",
+      "bytes": 11652,
+      "sha256": "fe11003d9fbbf368628593819cc9bba99b303c504003ca00255cce73194a2e39",
+      "frozen": true
+    },
+    {
+      "path": "m1_advanced_test_report.json",
+      "bytes": 269,
+      "sha256": "b6cf9f9a2d489ed9c9c794dd37e457de2913d72da34a4732d70297cf43aff6ac",
+      "frozen": true
+    },
+    {
+      "path": "m1_advanced_tests.js",
+      "bytes": 48110,
+      "sha256": "106821db53addead07f5de51e494be506dcb9869b7e6678065535e2eedc44514",
+      "frozen": true
+    },
+    {
+      "path": "m1_advanced_version_sync_report.json",
+      "bytes": 331,
+      "sha256": "83cbf5233bf4083af2ffa47edcf822c97e85b379fc2d752773035949e372c50d",
+      "frozen": true
+    },
+    {
+      "path": "m1_advanced_version_sync_tests.js",
+      "bytes": 3682,
+      "sha256": "530cd4cf1a71c0e9cba06c50bfa3681f37344bcd79e53c0941f6fe3340e23eed",
+      "frozen": true
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 18165,
+      "sha256": "33e6d7978d956d3b64cff983d83a4933b856b55482b497ad607a36ebf74c245f",
+      "frozen": false
+    },
+    {
+      "path": "package.json",
+      "bytes": 867,
+      "sha256": "c4e3938d71778772f98bbd67932c677dfeeef7b81e8a2ca859895ae8d2490e24",
+      "frozen": false
+    },
+    {
+      "path": "rebuild_provenance.js",
+      "bytes": 4442,
+      "sha256": "d9d98b2be6e07daf2a5c9ad794015947528a4d1e41ef6face2232b9de0b03ecb",
+      "frozen": false
+    },
+    {
+      "path": "rebuild_provenance_report.json",
+      "bytes": 3811,
+      "sha256": "85b9eb168f14a098ca43aec069228865b98c6ef947f1584c397486e76e68e3e6",
+      "frozen": false
+    },
+    {
+      "path": "screenshots/both.png",
+      "bytes": 241854,
+      "sha256": "bdebe9249f4eecc5b9688d2c90ff57e260c4fcba015f0e0580524b536951c4de",
+      "frozen": false
+    },
+    {
+      "path": "screenshots/corvis.png",
+      "bytes": 131208,
+      "sha256": "4659644c7ee7c70c961f3508370258e92344879847c97d3e6f06a16c0edf79cb",
+      "frozen": false
+    },
+    {
+      "path": "screenshots/failure.png",
+      "bytes": 105791,
+      "sha256": "6aac0f65aa84234293ce59ede089bf98cc367d652e200b2c0b7f873d24a7523f",
+      "frozen": false
+    },
+    {
+      "path": "screenshots/ora.png",
+      "bytes": 148511,
+      "sha256": "f91680f041018ce29003a7997dc66da3e9cd6150a13254ee7203a1584926e9c9",
+      "frozen": false
+    },
+    {
+      "path": "smoke_bundle.js",
+      "bytes": 5518,
+      "sha256": "069a0cb6e05b2e9bd17160ba1037a0604b39d33c57df989b8d8c07374da9970a",
+      "frozen": false
+    },
+    {
+      "path": "verify_frozen_immutability.js",
+      "bytes": 2965,
+      "sha256": "d2ee2c0eccae3cf6346071aa52fe6b79073e7161029c5c3dd6da2af284952a7b",
+      "frozen": false
+    },
+    {
+      "path": "verify_manifest.js",
+      "bytes": 6930,
+      "sha256": "b735b0f2c7fa6b933d5dd2882feb7d90eca579dac6ea649db25f9a35b576cd67",
+      "frozen": false
+    }
+  ]
+}

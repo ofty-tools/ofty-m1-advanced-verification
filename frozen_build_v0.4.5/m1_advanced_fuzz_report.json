@@ -1,0 +1,10 @@
+{
+  "fuzz_suite_version": "M1-ADV-FUZZ-1.3",
+  "seed": 42,
+  "schema_version": "M1-ADV-SCHEMA-1.3",
+  "total_inputs": 352,
+  "crashes": 0,
+  "schema_failures": 0,
+  "all_clean": true,
+  "failure_samples": []
+}

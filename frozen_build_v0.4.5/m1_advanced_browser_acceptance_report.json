@@ -1,0 +1,273 @@
+{
+  "report": "M1 Advanced — FORMAL U1–U21 browser acceptance gate",
+  "generated_utc": "2026-06-18T09:31:42.326Z",
+  "environment": {
+    "node": "v22.22.2",
+    "playwright_chromium": "141.0.7390.37"
+  },
+  "base_artifacts": {
+    "index_html_sha256": "3e3f4d0bf66715b4ee0b3bdd01cc19aa16d372129da50962b97b8f3406e5e7e8",
+    "bundle_sha256": "9f9a0fe47c8285804268532634593c27539083a811e31e32bf71b33ad5f78ffd"
+  },
+  "summary": {
+    "passed": 28,
+    "failed": 0,
+    "not_executed": 0,
+    "total": 28
+  },
+  "console_errors": [],
+  "records": [
+    {
+      "u": "U8",
+      "purpose": "Provenance attestation unchecked blocks compute",
+      "input": "ORA fields valid, ora_provenance_confirmed = false",
+      "expected": "compute disabled; helper \"Confirm ORA same-result attestation\"; no result card",
+      "observed": "disabled=true; helper=\"Confirm ORA same-result attestation\"; resultCard=false",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U1",
+      "purpose": "Valid ORA high quality renders ORA card with quality \"high\", no error styling",
+      "input": "ORA gat=18 cct=540 iopcc=18.2 ch=10 wfs=7.5 count=4, confirmed",
+      "expected": "ORA result card; quality level \"high\"; no failure-card",
+      "observed": "IOPcc rendered=true; qualityHigh=true; failureCard=false",
+      "result": "PASS",
+      "evidence": "acceptance_screenshots/U1_ora_success.png"
+    },
+    {
+      "u": "U9",
+      "purpose": "Any success shows the not-eligible-for-target-IOP line",
+      "input": "ORA success (from U1)",
+      "expected": "text \"Not eligible for target-IOP comparison\" visible",
+      "observed": "present=true",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U2",
+      "purpose": "CH=20 shows out-of-observed-range note (not an error), CH carries no coefficient",
+      "input": "ORA with ch=20",
+      "expected": "note \"outside the 4-18 mmHg observed range\"; success (no failure); CH non-modifying",
+      "observed": "failureCard=false; rangeNote=true; nonModifying=true",
+      "result": "PASS",
+      "evidence": "acceptance_screenshots/U2_ch_out_of_range.png"
+    },
+    {
+      "u": "U3",
+      "purpose": "Unrecognized Corvis label -> quality \"unknown\" + provisional-mapping tooltip; raw label retained in form",
+      "input": "Corvis raw_quality_label=\"ZZZ\"",
+      "expected": "quality chip \"unknown\"; tooltip contains \"mapping provisional (corvis-map-0.1)\"; raw label shown",
+      "observed": "qualityUnknown=true; tooltip=\"Raw label: ZZZ\\nCorvis quality mapping provisional (corvis-map-0.1)\"; rawInputRetained=true",
+      "result": "PASS",
+      "evidence": "acceptance_screenshots/U3_corvis_unknown.png"
+    },
+    {
+      "u": "U4",
+      "purpose": "Both with identical device values shows no-difference strip",
+      "input": "Both ora=18 corvis=18",
+      "expected": "strip \"No marked cross-device difference detected.\"",
+      "observed": "present=true",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U5",
+      "purpose": "Both diff>3 without temporal confirmation -> unconfirmed strip, neutral tint",
+      "input": "Both ora=18 corvis=22 (diff 4), clinician_confirmation=false",
+      "expected": "strip \"Numerical difference shown; clinical comparison not established.\"; neutral (non-warning) tint",
+      "observed": "strip=true; neutralTint=true",
+      "result": "PASS",
+      "evidence": "acceptance_screenshots/U5_both_unconfirmed.png"
+    },
+    {
+      "u": "U6",
+      "purpose": "Prior LASIK -> Core estimate not applicable; device applicability \"limited\"; refractive flag string",
+      "input": "ORA with prior_refractive_surgery=LASIK",
+      "expected": "Core \"not applicable\"; applicability \"limited\"; section 6.1 refractive flag",
+      "observed": "coreNotApplicable=true; applicabilityLimited=true; flag=true",
+      "result": "PASS",
+      "evidence": "acceptance_screenshots/U6_lasik.png"
+    },
+    {
+      "u": "U7",
+      "purpose": "Integration measurement_failure payload routes to failure; failure card shows no large number and no copy button",
+      "input": "engine payload measurement_failure.occurred=true (integration only) + UI-reachable failure for card semantics",
+      "expected": "engine status failure (type measurement_failure); failure card; no large mmHg number; no copy button",
+      "observed": "engine={\"status\":\"failure\",\"code\":\"DEVICE_ERROR\",\"type\":\"measurement_failure\"}; noCopyBtn=true; noBigNumber=true",
+      "result": "PASS",
+      "evidence": "acceptance_screenshots/U7_measurement_failure.png"
+    },
+    {
+      "u": "U10",
+      "purpose": "Integration eye-mismatch payload routes to EYE_MISMATCH failure with remediation message",
+      "input": "ora_inputs.eye=OS vs measurement_identity.eye=OD (integration only)",
+      "expected": "engine failure code EYE_MISMATCH with section 6.2 remediation string",
+      "observed": "engine={\"status\":\"failure\",\"code\":\"EYE_MISMATCH\",\"message\":\"Laterality mismatch between inputs; single-eye module.\"}",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U11",
+      "purpose": "Recompute into a failure clears the previous success card first (U11 clearing)",
+      "input": "ORA success, then gat_iop=999 invalid, recompute",
+      "expected": "no .result-card remains; exactly one .failure-card",
+      "observed": "hadResult=true; resultCardsAfter=0; failureCards=1",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U12",
+      "purpose": "Switching ORA->Corvis emits a Corvis payload with no ora_inputs / ora_metadata keys",
+      "input": "fill ORA, switch device_branch to corvis, fill Corvis, compute (real payload captured at M1ADV.computeM1Advanced)",
+      "expected": "payload sent to engine: device_branch=corvis, no ora_inputs key, no ora_metadata key",
+      "observed": "payload.branch=corvis; hasOraInputsKey=false; hasOraMetadataKey=false; payloadKeys=[gat_iop,cct,measurement_identity,keratoconus_ectasia,corneal_edema,significant_dystrophy_or_scar,prior_refractive_surgery,shared_encounter_id,clinician_confirmation,gat_timestamp,ora_timestamp,corvis_timestamp,device_branch,corvis_inputs,corvis_metadata]",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U13",
+      "purpose": "Advanced never writes the Core key: ofty_m1_result stays byte-identical (or absent); only ofty_m1_advanced_result is written",
+      "input": "seed ofty_m1_result sentinel then Advanced compute (Case A); empty storage then Advanced compute (Case B)",
+      "expected": "Case A: ofty_m1_result unchanged + ofty_m1_advanced_result written; Case B: ofty_m1_result absent + only ofty_m1_advanced_result among ofty_m1* keys",
+      "observed": "A.coreIdentical=true; A.advWritten=true; B.coreAbsent=true; B.ofty_keys=ofty_m1_advanced_result",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U14",
+      "purpose": "Corrupt Advanced JSON yields adapter {ok:false, reason:\"corrupt_json\"} and the UI recovers (no crash)",
+      "input": "seed ofty_m1_advanced_result with invalid JSON, read via adapter, then recompute",
+      "expected": "adapter returns {ok:false, reason:\"corrupt_json\"}; subsequent compute writes valid JSON",
+      "observed": "adapter={\"ok\":false,\"reason\":\"corrupt_json\"}; recoveredValidJSON=true",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U15",
+      "purpose": "When Core applicability is not_applicable, no Core IOP number appears (rendered or exported)",
+      "input": "ORA LASIK (core_reference.applicability=not_applicable)",
+      "expected": "no \"not true IOP: <number>\" anywhere in card or copied text",
+      "observed": "noCoreNumberRendered=true; noCoreNumberExport=true",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U16",
+      "purpose": "Both result has no DOM element marked as primary/hero (no single device is elevated)",
+      "input": "Both success",
+      "expected": "zero elements with primary/hero class/data/role markers",
+      "observed": "markerCount=0",
+      "result": "PASS",
+      "evidence": "acceptance_screenshots/U16_both_no_primary.png"
+    },
+    {
+      "u": "U17",
+      "purpose": "Copy (ORA canonical) matches spec section 7.1 byte-for-byte",
+      "input": "ORA gat=18 cct=540 iopcc=18.2 ch=10 confirmed -> Copy",
+      "expected": "copied text === spec section 7.1 fenced block (byte-for-byte, from spec file)",
+      "observed": "EXACT MATCH",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U17",
+      "purpose": "Copy (invalid temporal, single-branch ORA) suffixes the delta line per section 7.4 rule 2, byte-for-byte",
+      "input": "ORA unconfirmed (comparison_clinically_interpretable=false) -> Copy",
+      "expected": "copied === spec 7.1 with IOPcc line replaced by the spec 7.1 suffixed line",
+      "observed": "EXACT MATCH",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U17",
+      "purpose": "Copy (Core not_applicable) replaces the Core line per section 7.4 rule 1, byte-for-byte",
+      "input": "ORA LASIK -> Copy",
+      "expected": "copied contains exact line \"CCT-contextualized Core estimate — not true IOP: not applicable (<reason>)\" and no Core number",
+      "observed": "EXACT LINE MATCH: \"CCT-contextualized Core estimate — not true IOP: not applicable (Post-refractive surgery (LASIK): GAT-CCT linear model invalidated; device interpretation requires review.)\"",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U17",
+      "purpose": "Copy (Both) matches spec section 7.3 byte-for-byte with engine interpretation substituted",
+      "input": "Both gat=16 cct=540 ora=18 corvis=22 confirmed -> Copy",
+      "expected": "copied === spec 7.3 block with <device_comparison.interpretation> replaced by engine string",
+      "observed": "EXACT MATCH",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U18",
+      "purpose": "Accessibility: DOM tab order branch->shared->modifier->device->temporal->compute; failure moves focus into failure card; result region aria-live=polite",
+      "input": "Tab from #device_branch with temporal accordion open; then trigger failure",
+      "expected": "focus order is a subsequence of the canonical order and reaches compute; focus inside failure card on failure; aria-live=\"polite\"",
+      "observed": "tabSequence=device_branch>gat_iop>cct>prior_refractive_surgery>ora_iopcc>ora_ch>ora_wfs>ora_count>ora_provenance_confirmed>encounter_id>clinician_confirmation>compute_btn; subsequence=true; reachedCompute=true; focusInFailureCard=true; ariaLive=polite",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U19",
+      "purpose": "At 320px width there is no horizontal overflow and Both order is ORA->Corvis->cross-device",
+      "input": "viewport 320x800, Both result",
+      "expected": "documentElement.scrollWidth <= innerWidth; text order ORA < Corvis < cross-device",
+      "observed": "scrollW=320 inner=320 noOverflow=true; order(iORA,iCorvis,iCross)={\"iORA\":15,\"iCorvis\":22,\"iCross\":629} orderOk=true",
+      "result": "PASS",
+      "evidence": "acceptance_screenshots/U19_responsive_320.png"
+    },
+    {
+      "u": "U20",
+      "purpose": "Every rendered/exported number matches section 7.0 helpers; no clinical number appears that the engine did not return; near-zero delta forced to \"+0.0\"",
+      "input": "Corvis export (pressures, CCT integer, SP-A1 mmHg/mm, SSI bare, delta) + engine-number cross-check",
+      "expected": "pressures \"x.x mmHg\"; CCT \"n µm\"; SP-A1 \"x.x mmHg/mm\"; SSI bare; delta signed; all clinical tokens engine-returned; fmtDelta(0)/(-0.04)=\"+0.0\"",
+      "observed": "fmtOk=true; engineNums=[14.5,16.0,-1.5,600.0,13.6,1.1,95.0]; exportClinicalTokens=[16.0,600.0,14.5,95.0,13.6]; allFromEngine=true; zeroSignRule=true",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U21",
+      "purpose": "Encounter ID alone does NOT validate the comparison; only clinician_confirmation=true does",
+      "input": "Both with encounter_id=\"ENC-123\", clinician_confirmation=false then true",
+      "expected": "unconfirmed: basis=\"unconfirmed\", comparison_valid=false; confirmed: basis=\"clinician_confirmed_same_session\", comparison_valid=true",
+      "observed": "encounterOnly={\"basis\":\"unconfirmed\",\"valid\":false}; afterConfirmation={\"basis\":\"clinician_confirmed_same_session\",\"valid\":true}",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U8b",
+      "purpose": "Tampered manifest ALG_VERSION blocks compute (load-time integrity gate)",
+      "input": "served manifest with wrong engine_algorithm_version",
+      "expected": "banner shown + compute disabled + detail matches /ALG_VERSION/",
+      "observed": "bannerVisible=true; computeDisabled=true; detail=\"ALG_VERSION 0.4.3-experimental ≠ manifest 0.0.0-not-the-real-version\"",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U8c",
+      "purpose": "Tampered manifest bundle SHA-256 blocks compute",
+      "input": "served manifest with wrong bundle hash",
+      "expected": "banner shown + compute disabled + detail matches /bundle SHA-256/",
+      "observed": "bannerVisible=true; computeDisabled=true; detail=\"bundle SHA-256 9f9a0fe47c82… ≠ manifest deadbeefdead…\"",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "U8d",
+      "purpose": "Tampered schema $id + hash blocks compute (vs manifest AND vs M1ADV.CONSTANTS)",
+      "input": "served schema with altered $id",
+      "expected": "banner shown + compute disabled + detail matches /(schema SHA-256|schema \\$id)/",
+      "observed": "bannerVisible=true; computeDisabled=true; detail=\"schema SHA-256 e7c90ab1028e… ≠ manifest fbd983b1a443… · schema $id M1-ADV-SCHEMA-BOGUS ≠ manifest.schema_version M1-ADV-SCHEMA-1.3 · schema $id M1-ADV-SCHEMA-BOGUS ≠ M1ADV.CONSTANTS.SCHEMA_VERSION M1-ADV-SCHEMA-1.3\"",
+      "result": "PASS",
+      "evidence": null
+    },
+    {
+      "u": "UX",
+      "purpose": "No uncaught console/page errors during canonical acceptance flow",
+      "input": "all canonical (non-tamper) interactions above",
+      "expected": "zero console errors / page errors",
+      "observed": "none",
+      "result": "PASS",
+      "evidence": null
+    }
+  ]
+}

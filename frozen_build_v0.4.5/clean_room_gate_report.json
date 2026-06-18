@@ -1,0 +1,32 @@
+{
+  "report": "M1 ADVANCED — CLEAN-ROOM GATE (erratum v2)",
+  "procedure": [
+    "empty directory",
+    "unzip",
+    "npm ci",
+    "npm run gate",
+    "npm run smoke:browser"
+  ],
+  "generated_utc": "2026-06-18T08:45:33.833Z",
+  "environment": {
+    "node": "v22.22.2",
+    "npm": "10.9.7",
+    "esbuild": "0.28.1",
+    "ajv": "8.20.0",
+    "ajv_formats": "3.0.1",
+    "playwright": "1.56.0",
+    "os": "Ubuntu 24.04.4 LTS"
+  },
+  "results": {
+    "npm_ci": "exit 0",
+    "build": "esbuild IIFE -> m1_advanced_bundle.js",
+    "verify_frozen": "9/9 byte-identical vs dossier §3",
+    "smoke_bundle": "15/15 PASS",
+    "verify_manifest": "72/72 contract checks PASS",
+    "smoke_browser": "47/47 PASS (incl. 3 tampered-artifact scenarios)",
+    "gate_exit_code": 0,
+    "browser_smoke_exit_code": 0
+  },
+  "note": "Browser smoke requires Playwright chromium binary. In this run, PLAYWRIGHT_BROWSERS_PATH pointed to a pre-cached copy; in a fresh env, run `npx playwright install chromium`.",
+  "overall": "PASS"
+}

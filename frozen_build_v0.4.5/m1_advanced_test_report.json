@@ -1,0 +1,11 @@
+{
+  "suite_version": "M1-ADV-TESTS-1.3",
+  "engine_version": "0.4.3-experimental",
+  "schema_version": "M1-ADV-SCHEMA-1.3",
+  "test_scenarios": 95,
+  "total_assertions": 291,
+  "passed_assertions": 291,
+  "failed_assertions": 0,
+  "all_passed": true,
+  "failures": []
+}

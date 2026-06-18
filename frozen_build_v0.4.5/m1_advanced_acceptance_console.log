@@ -1,0 +1,35 @@
+════════════════════════════════════════════════════════════
+  M1 ADVANCED — FORMAL U1–U21 BROWSER ACCEPTANCE GATE
+════════════════════════════════════════════════════════════
+  [PASS] U8 — Provenance attestation unchecked blocks compute
+  [PASS] U1 — Valid ORA high quality renders ORA card with quality "high", no 
+  [PASS] U9 — Any success shows the not-eligible-for-target-IOP line
+  [PASS] U2 — CH=20 shows out-of-observed-range note (not an error), CH carrie
+  [PASS] U3 — Unrecognized Corvis label -> quality "unknown" + provisional-map
+  [PASS] U4 — Both with identical device values shows no-difference strip
+  [PASS] U5 — Both diff>3 without temporal confirmation -> unconfirmed strip, 
+  [PASS] U6 — Prior LASIK -> Core estimate not applicable; device applicabilit
+  [PASS] U7 — Integration measurement_failure payload routes to failure; failu
+  [PASS] U10 — Integration eye-mismatch payload routes to EYE_MISMATCH failure 
+  [PASS] U11 — Recompute into a failure clears the previous success card first 
+  [PASS] U12 — Switching ORA->Corvis emits a Corvis payload with no ora_inputs 
+  [PASS] U13 — Advanced never writes the Core key: ofty_m1_result stays byte-id
+  [PASS] U14 — Corrupt Advanced JSON yields adapter {ok:false, reason:"corrupt_
+  [PASS] U15 — When Core applicability is not_applicable, no Core IOP number ap
+  [PASS] U16 — Both result has no DOM element marked as primary/hero (no single
+  [PASS] U17 — Copy (ORA canonical) matches spec section 7.1 byte-for-byte
+  [PASS] U17 — Copy (invalid temporal, single-branch ORA) suffixes the delta li
+  [PASS] U17 — Copy (Core not_applicable) replaces the Core line per section 7.
+  [PASS] U17 — Copy (Both) matches spec section 7.3 byte-for-byte with engine i
+  [PASS] U18 — Accessibility: DOM tab order branch->shared->modifier->device->t
+  [PASS] U19 — At 320px width there is no horizontal overflow and Both order is
+  [PASS] U20 — Every rendered/exported number matches section 7.0 helpers; no c
+  [PASS] U21 — Encounter ID alone does NOT validate the comparison; only clinic
+  [PASS] U8b — Tampered manifest ALG_VERSION blocks compute (load-time integrit
+  [PASS] U8c — Tampered manifest bundle SHA-256 blocks compute
+  [PASS] U8d — Tampered schema $id + hash blocks compute (vs manifest AND vs M1
+  [PASS] UX — No uncaught console/page errors during canonical acceptance flow
+────────────────────────────────────────────────────────────
+  passed=28  failed=0  not_executed=0  total=28
+  ALL EXECUTED TESTS PASSED ✓
+════════════════════════════════════════════════════════════

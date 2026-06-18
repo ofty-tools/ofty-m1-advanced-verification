@@ -1,0 +1,100 @@
+{
+  "report": "M1 ADVANCED — FROZEN ARTIFACT IMMUTABILITY",
+  "authority_file": "frozen_hashes_dossier_s3.json",
+  "authority_source": "dossier §3 SHA-256 manifest (verbatim)",
+  "generated_utc": "2026-06-18T22:36:18.428Z",
+  "artifact_count": 9,
+  "all_byte_identical": true,
+  "results": [
+    {
+      "file": "m1_advanced_engine.js",
+      "present": true,
+      "expected_hash": "1fef6cb46ef014c00cf6326f4ea6bf3f307911ea1658fed05123fd3c03cae63a",
+      "live_hash": "1fef6cb46ef014c00cf6326f4ea6bf3f307911ea1658fed05123fd3c03cae63a",
+      "hash_match": true,
+      "expected_bytes": 42816,
+      "live_bytes": 42816,
+      "bytes_match": true
+    },
+    {
+      "file": "m1_advanced_schema.json",
+      "present": true,
+      "expected_hash": "fbd983b1a443a1700402cf65ed9537c4279394747250547504260690b4a89d06",
+      "live_hash": "fbd983b1a443a1700402cf65ed9537c4279394747250547504260690b4a89d06",
+      "hash_match": true,
+      "expected_bytes": 26052,
+      "live_bytes": 26052,
+      "bytes_match": true
+    },
+    {
+      "file": "m1_advanced_storage_adapter.js",
+      "present": true,
+      "expected_hash": "d282045f73641342ce0b6a416399ad61a2db34719bb1437f13068284ea83fe87",
+      "live_hash": "d282045f73641342ce0b6a416399ad61a2db34719bb1437f13068284ea83fe87",
+      "hash_match": true,
+      "expected_bytes": 3656,
+      "live_bytes": 3656,
+      "bytes_match": true
+    },
+    {
+      "file": "m1_advanced_tests.js",
+      "present": true,
+      "expected_hash": "106821db53addead07f5de51e494be506dcb9869b7e6678065535e2eedc44514",
+      "live_hash": "106821db53addead07f5de51e494be506dcb9869b7e6678065535e2eedc44514",
+      "hash_match": true,
+      "expected_bytes": 48110,
+      "live_bytes": 48110,
+      "bytes_match": true
+    },
+    {
+      "file": "m1_advanced_storage_tests.js",
+      "present": true,
+      "expected_hash": "fe11003d9fbbf368628593819cc9bba99b303c504003ca00255cce73194a2e39",
+      "live_hash": "fe11003d9fbbf368628593819cc9bba99b303c504003ca00255cce73194a2e39",
+      "hash_match": true,
+      "expected_bytes": 11652,
+      "live_bytes": 11652,
+      "bytes_match": true
+    },
+    {
+      "file": "m1_advanced_fuzz_tests.js",
+      "present": true,
+      "expected_hash": "0c1310a6e595d6426bc4eed181c47aab306f025fd2ea27ea55d64675ca3b2884",
+      "live_hash": "0c1310a6e595d6426bc4eed181c47aab306f025fd2ea27ea55d64675ca3b2884",
+      "hash_match": true,
+      "expected_bytes": 5200,
+      "live_bytes": 5200,
+      "bytes_match": true
+    },
+    {
+      "file": "m1_advanced_version_sync_tests.js",
+      "present": true,
+      "expected_hash": "530cd4cf1a71c0e9cba06c50bfa3681f37344bcd79e53c0941f6fe3340e23eed",
+      "live_hash": "530cd4cf1a71c0e9cba06c50bfa3681f37344bcd79e53c0941f6fe3340e23eed",
+      "hash_match": true,
+      "expected_bytes": 3682,
+      "live_bytes": 3682,
+      "bytes_match": true
+    },
+    {
+      "file": "M1_ADV_FREEZE_RECORD.md",
+      "present": true,
+      "expected_hash": "91a3aed3ae2aa660165139ac1e6446dc6c3dc155a4424daebe868d542bf98f19",
+      "live_hash": "91a3aed3ae2aa660165139ac1e6446dc6c3dc155a4424daebe868d542bf98f19",
+      "hash_match": true,
+      "expected_bytes": 9548,
+      "live_bytes": 9548,
+      "bytes_match": true
+    },
+    {
+      "file": "M1_ADV_UI_SPEC_v0.4.1.md",
+      "present": true,
+      "expected_hash": "7e954920da441098b5fe9d82cf4e5383fb58b049ed54bbfd07515a14a06dd451",
+      "live_hash": "7e954920da441098b5fe9d82cf4e5383fb58b049ed54bbfd07515a14a06dd451",
+      "hash_match": true,
+      "expected_bytes": 36695,
+      "live_bytes": 36695,
+      "bytes_match": true
+    }
+  ]
+}

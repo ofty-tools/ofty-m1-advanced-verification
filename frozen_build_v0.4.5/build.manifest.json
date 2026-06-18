@@ -1,0 +1,111 @@
+{
+  "freeze_version": "v0.4.5",
+  "engine_algorithm_version": "0.4.3-experimental",
+  "schema_version": "M1-ADV-SCHEMA-1.3",
+  "ui_specification_version": "v0.4.1",
+  "module": {
+    "module_id": "OFTY-Gx-M1",
+    "module_variant": "advanced",
+    "deploy_path": "/glaucoma/iop-cct-advanced/",
+    "core_module_untouched": "OFTY-Gx-M1 v1.0.0 (separate engine, separate storage key ofty_m1_result)"
+  },
+  "versions": {
+    "clinical_specification": "v0.4.5",
+    "algorithm": "0.4.3-experimental",
+    "schema": "M1-ADV-SCHEMA-1.3",
+    "ui_specification": "v0.4.1",
+    "mapping": "corvis-map-0.1"
+  },
+  "build": {
+    "command": "esbuild m1_advanced_browser_entry.js --bundle --format=iife --global-name=M1ADV --target=es2020 --outfile=m1_advanced_bundle.js",
+    "format": "iife",
+    "global_name": "M1ADV",
+    "target": "es2020",
+    "browser_target": "es2020 (evergreen browsers; Chrome/Edge/Firefox/Safari supporting ES2020)",
+    "build_utc": "2026-06-17T22:25:17Z",
+    "erratum_utc": "2026-06-17T22:33:04Z"
+  },
+  "environment": {
+    "os": "Ubuntu 24.04.4 LTS",
+    "node": "v22.22.2",
+    "esbuild": "0.28.1",
+    "ajv": "8.20.0",
+    "ajv_formats": "3.0.1"
+  },
+  "sha256": {
+    "m1_advanced_engine.js": {
+      "hash": "1fef6cb46ef014c00cf6326f4ea6bf3f307911ea1658fed05123fd3c03cae63a",
+      "bytes": 42816
+    },
+    "m1_advanced_schema.json": {
+      "hash": "fbd983b1a443a1700402cf65ed9537c4279394747250547504260690b4a89d06",
+      "bytes": 26052
+    },
+    "m1_advanced_storage_adapter.js": {
+      "hash": "d282045f73641342ce0b6a416399ad61a2db34719bb1437f13068284ea83fe87",
+      "bytes": 3656
+    },
+    "m1_advanced_browser_entry.js": {
+      "hash": "35397884a21e94871f0d2e0b404a6038e234d6166799e733f94109dd47669892",
+      "bytes": 1088
+    },
+    "m1_advanced_bundle.js": {
+      "hash": "9f9a0fe47c8285804268532634593c27539083a811e31e32bf71b33ad5f78ffd",
+      "bytes": 380042
+    }
+  },
+  "frozen_reports_sha256": {
+    "m1_advanced_test_report.json": {
+      "hash": "b6cf9f9a2d489ed9c9c794dd37e457de2913d72da34a4732d70297cf43aff6ac",
+      "bytes": 269
+    },
+    "m1_advanced_storage_test_report.json": {
+      "hash": "5bceffb5356dccc2757b7016efa6124d9e787e1f3a7791a687f2fc53af64a99e",
+      "bytes": 192
+    },
+    "m1_advanced_fuzz_report.json": {
+      "hash": "c1c7a2d54ecaaf74baa1e29e3562452d64cca8cf8dbcae9e1d2583c2bf0d4ed6",
+      "bytes": 209
+    },
+    "m1_advanced_version_sync_report.json": {
+      "hash": "83cbf5233bf4083af2ffa47edcf822c97e85b379fc2d752773035949e372c50d",
+      "bytes": 331
+    }
+  },
+  "frozen_test_sources_sha256": {
+    "m1_advanced_tests.js": {
+      "hash": "106821db53addead07f5de51e494be506dcb9869b7e6678065535e2eedc44514",
+      "bytes": 48110
+    },
+    "m1_advanced_storage_tests.js": {
+      "hash": "fe11003d9fbbf368628593819cc9bba99b303c504003ca00255cce73194a2e39",
+      "bytes": 11652
+    },
+    "m1_advanced_fuzz_tests.js": {
+      "hash": "0c1310a6e595d6426bc4eed181c47aab306f025fd2ea27ea55d64675ca3b2884",
+      "bytes": 5200
+    },
+    "m1_advanced_version_sync_tests.js": {
+      "hash": "530cd4cf1a71c0e9cba06c50bfa3681f37344bcd79e53c0941f6fe3340e23eed",
+      "bytes": 3682
+    }
+  },
+  "frozen_artifacts_byte_identical": {
+    "verified_before_and_after_build": true,
+    "method": "rebuild_provenance.js: true pre/post-rebuild snapshots, 3-way compared vs dossier §3 authority (all 9/9; bundle bit-identical)",
+    "evidence": [
+      "frozen_hashes_dossier_s3.json",
+      "frozen_snapshot_pre_rebuild.json",
+      "frozen_snapshot_post_rebuild.json",
+      "rebuild_provenance.js",
+      "rebuild_provenance_report.json",
+      "verify_frozen_immutability.js",
+      "frozen_immutability_report.json"
+    ]
+  },
+  "gate_status": {
+    "sha256_artifacts_match_dossier_s3": "9/9 OK",
+    "bundle_load_smoke_test": "15/15 PASS",
+    "html_started": false
+  }
+}
