@@ -1,0 +1,1301 @@
+{
+  "report": "OFTY M1 Advanced — in-silico stress test v2 (strict comparability policy)",
+  "generated_utc": "2026-06-18T15:57:44.958Z",
+  "reproducibility": "reproducible under the locked software version, fixed seed, fixed sampler call order, and recorded runtime environment",
+  "seed": 42,
+  "prng_implementation": "MT19937 (32-bit Mersenne Twister), canonical reference implementation",
+  "module_version": "OFTY M1 Advanced Browser v0.4.1 (engine 0.4.3-experimental; JSON Schema contract M1-ADV-SCHEMA-1.3; final technical freeze v0.4.5)",
+  "comparability_policy": "Option A (strict): clinical cross-device comparability is valid ONLY IF clinician_confirmation === true; an encounter/session identifier alone never validates a clinical comparison",
+  "runtime_environment": {
+    "node": "v22.22.2",
+    "platform": "linux x64",
+    "ajv": "8.20.0",
+    "elapsed_ms": 5323
+  },
+  "clinical_surface_stress_test": {
+    "description": "Deployed clinical/manual input surface. shared_encounter_id is NEVER set (it is not set by the manual UI; per UI spec v0.4.1 §1.7 it is integration-only and unreachable from the form). The strict policy is evaluated here.",
+    "input_classes": {
+      "valid_synthetic_inputs": 50000,
+      "adversarial_malformed_inputs": 13000
+    },
+    "total_inputs": 63000,
+    "total_engine_evaluations": 126000,
+    "branches_tested": {
+      "ora": 15274,
+      "corvis": 14075,
+      "both": 31651,
+      "other_or_invalid": 2000
+    },
+    "scenario_strata": [
+      "nominal_mixed",
+      "concordant_both",
+      "discordant_both_unconfirmed",
+      "discordant_both_confirmed",
+      "ch_out_of_range",
+      "post_refractive",
+      "unknown_corvis_quality",
+      "invalid_temporal",
+      "boundary_values",
+      "measurement_failure",
+      "adv_foreign_toplevel",
+      "adv_missing_identity",
+      "adv_bad_eye",
+      "adv_gat_wrongtype",
+      "adv_gat_outrange",
+      "adv_cct_outrange",
+      "adv_bad_modifier",
+      "adv_bad_branch",
+      "adv_ora_missing_required",
+      "adv_ora_provenance_unconfirmed",
+      "adv_ora_outrange",
+      "adv_corvis_missing_biop",
+      "adv_corvis_outrange"
+    ],
+    "oracle_results": {
+      "determinism": {
+        "pass": 63000,
+        "fail": 0
+      },
+      "contract_validation": {
+        "pass": 63000,
+        "fail": 0
+      },
+      "invariant_violation_count": 0,
+      "failure_routing": {
+        "pass": 63000,
+        "fail": 0
+      },
+      "uncaught_exceptions": 0
+    },
+    "per_stratum": {
+      "nominal_mixed": {
+        "n": 5000,
+        "success": 5000,
+        "failure": 0,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "concordant_both": {
+        "n": 5000,
+        "success": 5000,
+        "failure": 0,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "discordant_both_unconfirmed": {
+        "n": 5000,
+        "success": 5000,
+        "failure": 0,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "discordant_both_confirmed": {
+        "n": 5000,
+        "success": 5000,
+        "failure": 0,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "ch_out_of_range": {
+        "n": 5000,
+        "success": 5000,
+        "failure": 0,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "post_refractive": {
+        "n": 5000,
+        "success": 5000,
+        "failure": 0,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "unknown_corvis_quality": {
+        "n": 5000,
+        "success": 5000,
+        "failure": 0,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "invalid_temporal": {
+        "n": 5000,
+        "success": 5000,
+        "failure": 0,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "boundary_values": {
+        "n": 5000,
+        "success": 5000,
+        "failure": 0,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "measurement_failure": {
+        "n": 5000,
+        "success": 0,
+        "failure": 5000,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "adv_foreign_toplevel": {
+        "n": 1000,
+        "success": 0,
+        "failure": 1000,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "adv_missing_identity": {
+        "n": 1000,
+        "success": 0,
+        "failure": 1000,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "adv_bad_eye": {
+        "n": 1000,
+        "success": 0,
+        "failure": 1000,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "adv_gat_wrongtype": {
+        "n": 1000,
+        "success": 0,
+        "failure": 1000,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "adv_gat_outrange": {
+        "n": 1000,
+        "success": 0,
+        "failure": 1000,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "adv_cct_outrange": {
+        "n": 1000,
+        "success": 0,
+        "failure": 1000,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "adv_bad_modifier": {
+        "n": 1000,
+        "success": 0,
+        "failure": 1000,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "adv_bad_branch": {
+        "n": 1000,
+        "success": 0,
+        "failure": 1000,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "adv_ora_missing_required": {
+        "n": 1000,
+        "success": 0,
+        "failure": 1000,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "adv_ora_provenance_unconfirmed": {
+        "n": 1000,
+        "success": 0,
+        "failure": 1000,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "adv_ora_outrange": {
+        "n": 1000,
+        "success": 0,
+        "failure": 1000,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "adv_corvis_missing_biop": {
+        "n": 1000,
+        "success": 0,
+        "failure": 1000,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      },
+      "adv_corvis_outrange": {
+        "n": 1000,
+        "success": 0,
+        "failure": 1000,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 0,
+        "routing_fail": 0,
+        "throws": 0
+      }
+    },
+    "failures": [],
+    "all_clear": true
+  },
+  "integration_affordance_audit": {
+    "description": "Separate probe of the integration-only shared_encounter_id field (set with clinician_confirmation=false). Reported honestly under item 7: NOT silently relaxed. This characterises a deliberate engine design decision, not a defect of the clinical surface.",
+    "probe_inputs": 5000,
+    "engine_source_rule": "assessComparisonContext(): comparison_valid = (basis==='clinician_confirmed_same_session' || basis==='shared_encounter_id')",
+    "ui_reachability": "UNREACHABLE from the manual UI: shared_encounter_id is absent from index.html and from the U1-U21 acceptance harness; documented integration-only in UI spec v0.4.1 §1.7 / Appendix A.",
+    "strict_policy_deviations": 5000,
+    "determinism": {
+      "pass": 5000,
+      "fail": 0
+    },
+    "contract_validation": {
+      "pass": 5000,
+      "fail": 0
+    },
+    "failure_routing": {
+      "pass": 5000,
+      "fail": 0
+    },
+    "uncaught_exceptions": 0,
+    "per_stratum": {
+      "integration_shared_encounter": {
+        "n": 5000,
+        "success": 5000,
+        "failure": 0,
+        "determinism_fail": 0,
+        "contract_fail": 0,
+        "invariant_violations": 5000,
+        "routing_fail": 0,
+        "throws": 0
+      }
+    },
+    "deviation_samples": [
+      {
+        "index": 0,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OS"
+          },
+          "gat_iop": 51,
+          "cct": 533,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 17,
+            "ch": 9.6,
+            "selected_waveform_score": 8.3,
+            "measurement_count": 3,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "single_reading"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 19.2,
+            "corvis_quality_raw": "acceptable",
+            "ssi": 1.7,
+            "sp_a1": 86.3
+          },
+          "shared_encounter_id": "ENC-5824"
+        }
+      },
+      {
+        "index": 1,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OS"
+          },
+          "gat_iop": 29,
+          "cct": 617,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 18.9,
+            "ch": 7.6,
+            "selected_waveform_score": 3.4,
+            "measurement_count": 4,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "single_reading"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 17.7,
+            "corvis_quality_raw": "high",
+            "ssi": 1.1,
+            "sp_a1": 137.1
+          },
+          "shared_encounter_id": "ENC-8478"
+        }
+      },
+      {
+        "index": 2,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OD"
+          },
+          "gat_iop": 60,
+          "cct": 712,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 9.9,
+            "ch": 8.8,
+            "selected_waveform_score": 9.6,
+            "measurement_count": 4,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "device_averaged_output"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 17.8,
+            "corvis_quality_raw": "OK",
+            "ssi": 0.7,
+            "sp_a1": 89.4
+          },
+          "shared_encounter_id": "ENC-9889"
+        }
+      },
+      {
+        "index": 3,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OD"
+          },
+          "gat_iop": 6,
+          "cct": 257,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 29.3,
+            "ch": 12.9,
+            "selected_waveform_score": 4,
+            "measurement_count": 4,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "device_averaged_output"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 20.7,
+            "corvis_quality_raw": "good",
+            "ssi": 1.1,
+            "sp_a1": 103.2
+          },
+          "shared_encounter_id": "ENC-8027"
+        }
+      },
+      {
+        "index": 4,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OS"
+          },
+          "gat_iop": 28,
+          "cct": 252,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 28.7,
+            "ch": 10.7,
+            "selected_waveform_score": 4.9,
+            "measurement_count": 3,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "single_reading"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 9.4,
+            "corvis_quality_raw": "borderline",
+            "ssi": 1,
+            "sp_a1": 63.3
+          },
+          "shared_encounter_id": "ENC-7690"
+        }
+      },
+      {
+        "index": 5,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OD"
+          },
+          "gat_iop": 45,
+          "cct": 476,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 28.2,
+            "ch": 12.5,
+            "selected_waveform_score": 7.4,
+            "measurement_count": 3,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "device_averaged_output"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 28.6,
+            "corvis_quality_raw": "high",
+            "ssi": 1.4,
+            "sp_a1": 94.4
+          },
+          "shared_encounter_id": "ENC-8144"
+        }
+      },
+      {
+        "index": 6,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OS"
+          },
+          "gat_iop": 6,
+          "cct": 724,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 11.4,
+            "ch": 10.7,
+            "selected_waveform_score": 5.3,
+            "measurement_count": 3,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "device_averaged_output"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 22.4,
+            "corvis_quality_raw": "OK",
+            "ssi": 1,
+            "sp_a1": 95
+          },
+          "shared_encounter_id": "ENC-5111"
+        }
+      },
+      {
+        "index": 7,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OS"
+          },
+          "gat_iop": 29,
+          "cct": 301,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 29.9,
+            "ch": 12.4,
+            "selected_waveform_score": 3,
+            "measurement_count": 4,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "device_averaged_output"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 29.1,
+            "corvis_quality_raw": "acceptable",
+            "ssi": 2,
+            "sp_a1": 111.3
+          },
+          "shared_encounter_id": "ENC-1988"
+        }
+      },
+      {
+        "index": 8,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OD"
+          },
+          "gat_iop": 16,
+          "cct": 350,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 20.1,
+            "ch": 6.9,
+            "selected_waveform_score": 5.9,
+            "measurement_count": 4,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "device_averaged_output"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 26.6,
+            "corvis_quality_raw": "good",
+            "ssi": 1.2,
+            "sp_a1": 113.9
+          },
+          "shared_encounter_id": "ENC-9718"
+        }
+      },
+      {
+        "index": 9,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OS"
+          },
+          "gat_iop": 43,
+          "cct": 294,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 8.2,
+            "ch": 9.4,
+            "selected_waveform_score": 6.5,
+            "measurement_count": 4,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "device_averaged_output"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 28.3,
+            "corvis_quality_raw": "OK",
+            "ssi": 1,
+            "sp_a1": 95.3
+          },
+          "shared_encounter_id": "ENC-6990"
+        }
+      },
+      {
+        "index": 10,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OS"
+          },
+          "gat_iop": 42,
+          "cct": 595,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 27.2,
+            "ch": 11.9,
+            "selected_waveform_score": 3.2,
+            "measurement_count": 3,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "single_reading"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 26.7,
+            "corvis_quality_raw": "good",
+            "ssi": 0.7,
+            "sp_a1": 61.9
+          },
+          "shared_encounter_id": "ENC-4065"
+        }
+      },
+      {
+        "index": 11,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OS"
+          },
+          "gat_iop": 28,
+          "cct": 679,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 23.6,
+            "ch": 10.6,
+            "selected_waveform_score": 4.6,
+            "measurement_count": 4,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "single_reading"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 19.7,
+            "corvis_quality_raw": "good",
+            "ssi": 1.3,
+            "sp_a1": 73.4
+          },
+          "shared_encounter_id": "ENC-8543"
+        }
+      },
+      {
+        "index": 12,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OD"
+          },
+          "gat_iop": 8,
+          "cct": 425,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 10.8,
+            "ch": 8,
+            "selected_waveform_score": 3.7,
+            "measurement_count": 6,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "single_reading"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 13,
+            "corvis_quality_raw": "poor",
+            "ssi": 1.7,
+            "sp_a1": 142
+          },
+          "shared_encounter_id": "ENC-2900"
+        }
+      },
+      {
+        "index": 13,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OD"
+          },
+          "gat_iop": 35,
+          "cct": 292,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 22.1,
+            "ch": 11.2,
+            "selected_waveform_score": 7.4,
+            "measurement_count": 4,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "device_averaged_output"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 14.9,
+            "corvis_quality_raw": "good",
+            "ssi": 1.8,
+            "sp_a1": 96.2
+          },
+          "shared_encounter_id": "ENC-8559"
+        }
+      },
+      {
+        "index": 14,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OD"
+          },
+          "gat_iop": 35,
+          "cct": 317,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 24.7,
+            "ch": 12.6,
+            "selected_waveform_score": 6.8,
+            "measurement_count": 2,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "single_reading"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 24.6,
+            "corvis_quality_raw": "poor",
+            "ssi": 0.8,
+            "sp_a1": 128.1
+          },
+          "shared_encounter_id": "ENC-6617"
+        }
+      },
+      {
+        "index": 15,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OD"
+          },
+          "gat_iop": 35,
+          "cct": 323,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 27.1,
+            "ch": 8.5,
+            "selected_waveform_score": 8.6,
+            "measurement_count": 3,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "single_reading"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 22.2,
+            "corvis_quality_raw": "high",
+            "ssi": 0.9,
+            "sp_a1": 139.3
+          },
+          "shared_encounter_id": "ENC-7474"
+        }
+      },
+      {
+        "index": 16,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OD"
+          },
+          "gat_iop": 60,
+          "cct": 616,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 21.5,
+            "ch": 13.3,
+            "selected_waveform_score": 5.1,
+            "measurement_count": 5,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "single_reading"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 12.2,
+            "corvis_quality_raw": "borderline",
+            "ssi": 1.5,
+            "sp_a1": 116.1
+          },
+          "shared_encounter_id": "ENC-7963"
+        }
+      },
+      {
+        "index": 17,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OS"
+          },
+          "gat_iop": 32,
+          "cct": 549,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 17.6,
+            "ch": 7,
+            "selected_waveform_score": 8.7,
+            "measurement_count": 1,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "single_reading"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 13.3,
+            "corvis_quality_raw": "acceptable",
+            "ssi": 1.4,
+            "sp_a1": 51.9
+          },
+          "shared_encounter_id": "ENC-5289"
+        }
+      },
+      {
+        "index": 18,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OS"
+          },
+          "gat_iop": 19,
+          "cct": 728,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 22,
+            "ch": 10,
+            "selected_waveform_score": 4.3,
+            "measurement_count": 2,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "device_averaged_output"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 16.3,
+            "corvis_quality_raw": "borderline",
+            "ssi": 1.2,
+            "sp_a1": 87.7
+          },
+          "shared_encounter_id": "ENC-6487"
+        }
+      },
+      {
+        "index": 19,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OS"
+          },
+          "gat_iop": 34,
+          "cct": 574,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 8.8,
+            "ch": 13.2,
+            "selected_waveform_score": 9,
+            "measurement_count": 6,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "single_reading"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 13.5,
+            "corvis_quality_raw": "OK",
+            "ssi": 1.3,
+            "sp_a1": 144.3
+          },
+          "shared_encounter_id": "ENC-7102"
+        }
+      },
+      {
+        "index": 20,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OS"
+          },
+          "gat_iop": 18,
+          "cct": 411,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 21.7,
+            "ch": 11.6,
+            "selected_waveform_score": 7.7,
+            "measurement_count": 2,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "single_reading"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 23.6,
+            "corvis_quality_raw": "OK",
+            "ssi": 1,
+            "sp_a1": 92
+          },
+          "shared_encounter_id": "ENC-6726"
+        }
+      },
+      {
+        "index": 21,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OD"
+          },
+          "gat_iop": 40,
+          "cct": 632,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 8.6,
+            "ch": 8.8,
+            "selected_waveform_score": 4.5,
+            "measurement_count": 3,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "device_averaged_output"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 19.8,
+            "corvis_quality_raw": "poor",
+            "ssi": 0.8,
+            "sp_a1": 114.9
+          },
+          "shared_encounter_id": "ENC-1634"
+        }
+      },
+      {
+        "index": 22,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OD"
+          },
+          "gat_iop": 54,
+          "cct": 596,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 12.5,
+            "ch": 6.1,
+            "selected_waveform_score": 9.1,
+            "measurement_count": 2,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "device_averaged_output"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 26.2,
+            "corvis_quality_raw": "good",
+            "ssi": 2,
+            "sp_a1": 76.7
+          },
+          "shared_encounter_id": "ENC-3917"
+        }
+      },
+      {
+        "index": 23,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OS"
+          },
+          "gat_iop": 24,
+          "cct": 622,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 17.9,
+            "ch": 7.9,
+            "selected_waveform_score": 8.1,
+            "measurement_count": 6,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "device_averaged_output"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 28.7,
+            "corvis_quality_raw": "OK",
+            "ssi": 1.3,
+            "sp_a1": 142.1
+          },
+          "shared_encounter_id": "ENC-5843"
+        }
+      },
+      {
+        "index": 24,
+        "kind": "invariant",
+        "group": "integration",
+        "stratum": "integration_shared_encounter",
+        "branch": "both",
+        "detail": "comparison_valid_without_clinician_confirmation:basis=shared_encounter_id",
+        "input": {
+          "device_branch": "both",
+          "measurement_identity": {
+            "eye": "OD"
+          },
+          "gat_iop": 21,
+          "cct": 615,
+          "keratoconus_ectasia": false,
+          "corneal_edema": false,
+          "significant_dystrophy_or_scar": false,
+          "prior_refractive_surgery": null,
+          "clinician_confirmation": false,
+          "ora_inputs": {
+            "iopcc": 11,
+            "ch": 8.9,
+            "selected_waveform_score": 8.1,
+            "measurement_count": 4,
+            "provenance_attestation": {
+              "values_from_same_device_result_confirmed": true,
+              "basis": "single_reading"
+            }
+          },
+          "corvis_inputs": {
+            "biop": 25.1,
+            "corvis_quality_raw": "OK",
+            "ssi": 1.7,
+            "sp_a1": 122.6
+          },
+          "shared_encounter_id": "ENC-7398"
+        }
+      }
+    ],
+    "classification": "7(b) deliberate design decision: the engine accepts a documented shared-encounter attestation as a valid comparison basis for trusted middleware. On the clinical/manual surface (shared_encounter_id never set) the strict Option-A invariant holds with zero violations."
+  },
+  "headline": {
+    "clinical_surface_all_clear": true,
+    "clinical_strict_invariant_violations": 0,
+    "integration_path_deviations": 5000
+  },
+  "artifact_hashes_sha256": {
+    "m1_advanced_engine.js": "1fef6cb46ef014c00cf6326f4ea6bf3f307911ea1658fed05123fd3c03cae63a",
+    "m1_advanced_schema.json": "fbd983b1a443a1700402cf65ed9537c4279394747250547504260690b4a89d06",
+    "mt19937.js": "c546d6ed5a49d383626e4e2ca40be3178528fb2de4405c694e25478674ee9e6f",
+    "run_monte_carlo_v2.js": "20eacc25429958c0b3dbf5f082eb28741ce67043bfef5ae43d814045e2fdd1ed"
+  }
+}

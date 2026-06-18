@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>OFTY Tool #1 — IOP/CCT Adjustment — Goldmann-Based</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%91%81%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ============================================================
+   TOKENS — light (default)
+   ============================================================ */
+:root {
+  color-scheme: light;
+  --bg:           #F4F6F9;
+  --surface:      #FFFFFF;
+  --surface-2:    #F8FAFC;
+  --border:       #E2E8F0;
+  --border-focus: #1C4F8C;
+
+  --text-1:       #0F172A;
+  --text-2:       #334155;
+  --text-3:       #64748B;
+
+  --accent:       #1C4F8C;
+  --accent-dim:   #EEF4FF;
+  --accent-hover: #163E70;
+  --accent-ring:  rgba(28, 79, 140, 0.18);
+
+  --ok:           #166534;
+  --ok-dim:       #F0FDF4;
+  --ok-border:    #86EFAC;
+
+  --warn:         #92400E;
+  --warn-dim:     #FFFBEB;
+  --warn-border:  #FCD34D;
+
+  --err:          #991B1B;
+  --err-dim:      #FEF2F2;
+  --err-border:   #FCA5A5;
+
+  --accent-border-25: #C2D3EB;   /* accent 25% on white — replaces color-mix */
+  --accent-border-20: #CEDEEF;   /* accent 20% on white — replaces color-mix */
+  --accent-grad-end:  #4A7FC1;   /* accent 50% + #60A5FA blend — replaces color-mix */
+
+  --radius-sm:    6px;
+  --radius:       10px;
+  --radius-lg:    14px;
+
+  --shadow-sm:    0 1px 2px rgba(0,0,0,0.06);
+  --shadow:       0 1px 4px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:    0 4px 16px rgba(0,0,0,0.09), 0 2px 4px rgba(0,0,0,0.04);
+}
+
+/* ============================================================
+   RESET + BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  background: var(--bg);
+}
+
+body {
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text-1);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   NAV BAR
+   ============================================================ */
+.nav-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 16px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+.nav-bar-inner {
+  max-width: 520px;
+  margin: 0 auto;
+  width: 100%;
+}
+.nav-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text-3);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 0.15s;
+}
+.nav-back:hover { color: var(--accent); }
+.nav-back svg { flex-shrink: 0; }
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 18px 16px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: var(--shadow-sm);
+}
+.site-header-inner {
+  max-width: 520px;
+  margin: 0 auto;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-border-25);
+  border-radius: 4px;
+  padding: 2px 8px 2px 7px;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+.badge-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+.site-header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--text-1);
+  line-height: 1.25;
+}
+.site-header h1 em {
+  font-style: normal;
+  color: var(--text-3);
+  font-weight: 400;
+}
+.header-sub {
+  margin-top: 5px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text-3);
+  letter-spacing: 0.04em;
+}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+main {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 20px 16px 16px;
+}
+
+/* ============================================================
+   CARD
+   ============================================================ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.card-head {
+  padding: 12px 18px 10px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.card-head-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.card-body {
+  padding: 18px 18px 20px;
+}
+
+/* ============================================================
+   INPUTS
+   ============================================================ */
+.field { margin-bottom: 16px; }
+.field:last-of-type { margin-bottom: 0; }
+
+.field-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+  margin-bottom: 6px;
+}
+.field-label .unit-hint {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-3);
+  margin-left: 4px;
+}
+
+.input-wrap {
+  position: relative;
+}
+.input-wrap input {
+  width: 100%;
+  height: 46px;
+  padding: 0 52px 0 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text-1);
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.input-wrap input::placeholder {
+  color: #C8CDD5;
+  opacity: 1;
+}
+.input-wrap input::-webkit-input-placeholder { color: #C8CDD5; }
+.input-wrap input::-moz-placeholder { color: #C8CDD5; opacity: 1; }
+.input-wrap input:-ms-input-placeholder { color: #C8CDD5; }
+.input-wrap input::-webkit-inner-spin-button,
+.input-wrap input::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+.input-wrap input:focus {
+  border-color: var(--border-focus);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+.input-wrap input.is-error {
+  border-color: var(--err) !important;
+  box-shadow: 0 0 0 3px rgba(224,36,36,0.12) !important;
+  background: var(--surface);
+}
+.field-error { display: none !important; }
+.input-unit {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text-3);
+  pointer-events: none;
+  user-select: none;
+}
+.range-hint {
+  display: none;
+  color: var(--err, #c0392b);
+  font-size: 0.72rem;
+  margin-top: 3px;
+}
+#pio.is-error ~ .range-hint,
+#cct.is-error ~ .range-hint { display: block; }
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.10s, border-color 0.15s;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+.btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.btn-primary {
+  flex: 1;
+  height: 46px;
+  background: var(--accent);
+  color: #fff;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 6px var(--accent-ring);
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 3px 10px var(--accent-ring);
+  transform: translateY(-1px);
+}
+.btn-primary:active { transform: translateY(0); box-shadow: none; }
+
+.btn-outline {
+  height: 46px;
+  padding: 0 18px;
+  background: transparent;
+  color: var(--text-2);
+  border: 1.5px solid var(--border);
+}
+.btn-outline:hover {
+  background: var(--surface-2);
+  border-color: var(--text-3);
+  color: var(--text-1);
+}
+.btn-outline:active { background: var(--border); }
+
+/* ============================================================
+   RESULT CARD
+   ============================================================ */
+.result-card {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+.result-card.is-visible { display: block; }
+
+.result-hero {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 22px 20px 18px;
+  position: relative;
+}
+.result-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-grad-end));
+}
+.result-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.result-number-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.result-number {
+  font-family: 'DM Mono', monospace;
+  font-size: 40px;
+  font-weight: 400;
+  color: var(--accent);
+  letter-spacing: 0;
+  line-height: 1;
+  margin-left: -1px;
+}
+.result-number-unit {
+  font-family: 'DM Mono', monospace;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--accent);
+  opacity: 0.75;
+  letter-spacing: 0;
+}
+.result-subtitle {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 0;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.02em;
+}
+.result-range-warning {
+  display: none;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--err);
+}
+
+.result-detail {
+  padding: 11px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.result-detail:last-of-type { border-bottom: none; }
+.result-detail-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3);
+}
+.result-detail-sub {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 2px;
+  font-family: 'DM Mono', monospace;
+}
+.result-detail-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-1);
+  letter-spacing: -0.02em;
+  text-align: right;
+}
+.result-detail-val-sm {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-1);
+  letter-spacing: -0.02em;
+  text-align: right;
+}
+
+.btn-copy-wrap {
+  padding: 12px 16px 14px;
+  border-top: 1px solid var(--border);
+}
+.btn-copy {
+  width: 100%;
+  height: 40px;
+  background: var(--surface-2);
+  color: var(--text-2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  gap: 6px;
+}
+.btn-copy:hover { background: var(--bg); color: var(--text-1); border-color: var(--text-3); }
+.btn-copy.is-copied {
+  background: var(--ok-dim);
+  border-color: var(--ok-border);
+  color: var(--ok);
+}
+
+/* ============================================================
+   COLLAPSIBLE
+   ============================================================ */
+.collapse {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.collapse-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-1);
+  text-align: left;
+  letter-spacing: 0.01em;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
+  height: auto;
+}
+.collapse-trigger:hover { background: var(--surface-2); }
+.collapse-trigger:focus-visible { box-shadow: 0 0 0 3px var(--accent-ring); }
+
+.collapse-chevron {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--text-3);
+  transition: transform 0.20s ease;
+}
+.collapse.is-open .collapse-chevron { transform: rotate(180deg); }
+
+.collapse-body {
+  display: none;
+  border-top: 1px solid var(--border);
+  padding: 14px 16px 16px;
+}
+.collapse.is-open .collapse-body { display: block; }
+
+.collapse-preview {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-2);
+  font-style: italic;
+  margin-bottom: 10px;
+}
+.btn-toggle-more {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  height: auto;
+  display: inline;
+  transition: color 0.15s;
+}
+.btn-toggle-more:hover { color: var(--accent-hover); }
+
+.collapse-extra {
+  display: none;
+  margin-top: 12px;
+}
+.collapse-extra.is-open { display: block; }
+.collapse-extra p {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-2);
+  margin-bottom: 10px;
+}
+.collapse-extra p:last-child { margin-bottom: 0; }
+.collapse-extra strong { color: var(--text-1); font-weight: 600; }
+
+.collapse-trigger-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--text-3);
+  margin-right: 8px;
+}
+.collapse-trigger-label {
+  flex: 1;
+  text-align: left;
+}
+
+/* Sources list */
+.src-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.src-list li {
+  display: flex;
+  gap: 9px;
+  align-items: baseline;
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.5;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.src-list li:last-child { border-bottom: none; }
+.src-list li::before {
+  content: '-';
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text-3);
+  flex-shrink: 0;
+}
+
+/* Version list */
+.ver-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.ver-list > li {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.5;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.ver-list > li:last-child { border-bottom: none; }
+.ver-tag {
+  font-weight: 500;
+  color: var(--accent);
+  margin-right: 6px;
+}
+
+.ver-notes {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0 0;
+}
+.ver-notes li {
+  display: flex;
+  gap: 9px;
+  align-items: baseline;
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.5;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.ver-notes li:last-child { border-bottom: none; }
+.ver-notes li::before {
+  content: '-';
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text-3);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+  text-align: center;
+  font-size: 11px;
+  color: #9CA3AF;
+  font-family: 'DM Mono', monospace;
+  margin-top: 4px;
+  padding-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 380px) { .site-footer { font-size: 10px; } }
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.result-card.is-visible {
+  animation: slideUp 0.25s ease forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+  .feedback-line { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 11px; font-weight: 500; color: var(--text-3); font-family: 'DM Sans', sans-serif; text-align: center; padding: 14px 0 18px; text-decoration: none; transition: color .15s; border-bottom: 1px solid var(--border); margin-bottom: 2px; }
+  .feedback-line svg { flex-shrink: 0; stroke: var(--text-3); transition: stroke .2s ease, transform .2s ease; }
+  .feedback-line em { font-style: normal; color: var(--accent); text-decoration: underline; text-underline-offset: 2px; text-decoration-color: transparent; transition: text-decoration-color .25s ease, color .15s; }
+  .feedback-line:hover svg { stroke: var(--accent); transform: scale(1.15); }
+  .feedback-line:hover em { color: var(--accent-hover); text-decoration-color: var(--accent-hover); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav-bar" aria-label="Site navigation">
+  <div class="nav-bar-inner">
+    <a class="nav-back" href="../index.html" aria-label="Back to OFTY Glaucoma Suite">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+      Back to OFTY Glaucoma Suite
+    </a>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <div class="badge" role="status" aria-label="OFTY Tool #1">
+      <span class="badge-dot" aria-hidden="true"></span>
+      OFTY TOOL #1
+    </div>
+    <h1>IOP/CCT Adjustment</h1>
+    <p class="header-sub">Contextualizes Goldmann IOP using central corneal thickness.</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- PATIENT PARAMETERS CARD -->
+  <div class="card" role="region" aria-label="Patient parameters">
+    <div class="card-head">
+      <span class="card-head-label">Patient Parameters</span>
+    </div>
+    <div class="card-body">
+
+      <div class="field">
+        <label class="field-label" for="pio">
+          Measured IOP
+        </label>
+        <div class="input-wrap">
+          <input
+            type="number"
+            id="pio"
+            inputmode="decimal"
+            placeholder="15.0"
+            step="0.1"
+            min="5"
+            max="60"
+            autocomplete="off"
+            aria-label="Measured intraocular pressure in mmHg"
+          >
+          <span class="input-unit" aria-hidden="true">mmHg</span>
+          <div class="range-hint" id="pio-hint">5 – 60 mmHg</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="cct">
+          Central Corneal Thickness (CCT)
+        </label>
+        <div class="input-wrap">
+          <input
+            type="number"
+            id="cct"
+            inputmode="decimal"
+            placeholder="540"
+            step="1"
+            min="250"
+            max="750"
+            autocomplete="off"
+            aria-label="Central corneal thickness in microns"
+          >
+          <span class="input-unit" aria-hidden="true">µm</span>
+          <div class="range-hint" id="cct-hint">250 – 750 µm</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btn-calc" onclick="calculate()" aria-label="Calculate adjusted IOP">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+          Calculate
+        </button>
+        <button class="btn btn-outline" id="btn-reset" onclick="resetAll()" aria-label="Reset inputs">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+          Reset
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RESULT CARD -->
+  <div class="result-card" id="result-card" role="region" aria-live="polite" aria-label="Calculation result">
+
+    <div class="result-hero">
+      <div class="result-eyebrow">IOP Estimate</div>
+      <div class="result-number-row">
+        <div class="result-number" id="res-pio">--</div>
+        <div class="result-number-unit">mmHg</div>
+      </div>
+      <div class="result-subtitle">GAT-based</div>
+      <div class="result-range-warning" id="res-warning" aria-live="polite">
+        Result outside physiologic range — please verify inputs.
+      </div>
+    </div>
+
+    <div class="result-detail">
+      <div class="result-detail-label">Measured IOP</div>
+      <div class="result-detail-val-sm" id="res-measured">--</div>
+    </div>
+
+    <div class="result-detail">
+      <div class="result-detail-label">CCT</div>
+      <div class="result-detail-val-sm" id="res-cct-info"></div>
+    </div>
+
+    <div class="result-detail">
+      <div class="result-detail-label">Applied adjustment</div>
+      <div class="result-detail-val" id="res-delta">--</div>
+    </div>
+
+    <div class="result-detail">
+      <div class="result-detail-label">Method</div>
+      <div class="result-detail-val-sm">Linear &middot; ref. 540 µm</div>
+    </div>
+
+    <div class="btn-copy-wrap">
+      <button class="btn btn-copy" id="btn-copy" onclick="copyResult()" aria-label="Copy result to clipboard">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>
+        Copy
+      </button>
+    </div>
+
+  </div>
+
+  <!-- FEEDBACK -->
+  <a class="feedback-line" href="mailto:dott.andrea.ragosta@gmail.com?subject=%5BOFTY%20M1%5D%20Feedback">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <em>Share feedback or report a case</em>
+  </a>
+
+  <!-- DISCLAIMER -->
+  <div class="collapse" id="collapse-disc">
+    <button
+      class="collapse-trigger"
+      onclick="toggleCollapse('collapse-disc')"
+      aria-expanded="false"
+      aria-controls="collapse-disc-body"
+    >
+      <svg class="collapse-trigger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span class="collapse-trigger-label">Disclaimer</span>
+      <svg class="collapse-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </button>
+    <div class="collapse-body" id="collapse-disc-body">
+      <p class="collapse-preview">Does not replace clinical judgment or tonometric assessment. Thin CCT is an independent risk factor for glaucoma development (OHTS) &mdash; eyes with extreme CCT (&lt;480 &micro;m or &gt;620 &micro;m) may require additional caution.</p>
+      <button class="btn-toggle-more" onclick="toggleMore('collapse-disc-extra', this)">Read full disclaimer</button>
+      <div class="collapse-extra" id="collapse-disc-extra">
+        <p>Linear correction following Ehlers et al. (Acta Ophthalmol, 1975): IOP adjusted = IOP measured &minus; (CCT &minus; 540) / 25, ref. 540 &micro;m, 1 mmHg per 25 &micro;m deviation.</p>
+        <p>Individual corneal biomechanics &mdash; including hysteresis, rigidity, and structural properties &mdash; are not accounted for by this model. This value does not represent true intraocular pressure.</p>
+        <p>The clinician retains full responsibility for all diagnostic and therapeutic decisions. Decision-support aid only &mdash; not a substitute for clinical evaluation. Not intended for patient self-use.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOURCES -->
+  <div class="collapse" id="collapse-src">
+    <button
+      class="collapse-trigger"
+      onclick="toggleCollapse('collapse-src')"
+      aria-expanded="false"
+      aria-controls="collapse-src-body"
+    >
+      <svg class="collapse-trigger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg>
+      <span class="collapse-trigger-label">Sources (Summary)</span>
+      <svg class="collapse-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </button>
+    <div class="collapse-body" id="collapse-src-body">
+      <ul class="src-list">
+        <li>Ehlers N, Bramsen T, Sperling S. Applanation tonometry and central corneal thickness. Acta Ophthalmol. 1975;53(1):34&ndash;43.</li>
+        <li>Gedde SJ, Vinod K, Wright MM, et al. Primary open-angle glaucoma preferred practice pattern. Ophthalmology. 2021;128(1S):P71&ndash;P150.</li>
+        <li>European Glaucoma Society. Terminology and guidelines for glaucoma, 6th edition. Br J Ophthalmol. 2025;109(Suppl 1):1&ndash;212.</li>
+        <li>Gordon MO, Beiser JA, Brandt JD, et al. The Ocular Hypertension Treatment Study: baseline factors that predict the onset of primary open-angle glaucoma. Arch Ophthalmol. 2002;120(6):714&ndash;720.</li>
+        <li>Doughty MJ, Zaman ML. Human corneal thickness and its impact on intraocular pressure measures: a review and meta-analysis approach. Surv Ophthalmol. 2000;44(5):367&ndash;408.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- VERSION HISTORY -->
+  <div class="collapse" id="collapse-ver">
+    <button
+      class="collapse-trigger"
+      onclick="toggleCollapse('collapse-ver')"
+      aria-expanded="false"
+      aria-controls="collapse-ver-body"
+    >
+      <svg class="collapse-trigger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+      <span class="collapse-trigger-label">Version History</span>
+      <svg class="collapse-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </button>
+    <div class="collapse-body" id="collapse-ver-body">
+      <ul class="ver-list">
+        <li>
+          <span><span class="ver-tag">v1.0</span>Mar 2026</span>
+          <ul class="ver-notes">
+            <li>Initial public release</li>
+            <li>Result card: inline unit display, structured detail rows</li>
+            <li>Disclaimer and Sources finalized (Ehlers 1975, EGS 6th ed.)</li>
+            <li>Light mode enforced; Safari/iOS compatibility improved</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">OFTY &middot; M1 &middot; &copy; 2026 Andrea Ragosta, MD, FEBO</footer>
+
+</main>
+
+<script>
+/* ── Validation constants ───────────────────────────────────── */
+const PIO_MIN = 5, PIO_MAX = 60;
+const CCT_MIN = 250, CCT_MAX = 750;
+
+/* ── Version (single source of truth) ──────────────────────── */
+var M1_VERSION = '1.0.0';
+
+let lastResult = null;
+
+/* ── Pure clinical function — OFTY-Gx-M1 ───────────────────── */
+function computeM1_IOP_CCT(pio, cct) {
+  var REF    = 540;
+  var FACTOR = 25;
+
+  var adjustment     = -((cct - REF) / FACTOR);
+  var adjusted_iop   = pio + adjustment;
+  var abs_adjustment = Math.abs(adjustment);
+
+  var cct_label =
+    cct < 520 ? 'thin' :
+    cct > 560 ? 'thick' :
+    'average';
+
+  var impact_class =
+    abs_adjustment < 1  ? 'low' :
+    abs_adjustment < 3  ? 'moderate' :
+    'high';
+
+  var caution_flags = ['biomechanics_not_assessed'];
+  if (cct < 480 || cct > 620)    caution_flags.push('extreme_cct');
+  if (impact_class === 'high')   caution_flags.push('large_adjustment');
+
+  return {
+    module_id:         'OFTY-Gx-M1',
+    algorithm_version: M1_VERSION,
+    inputs: {
+      pio_mmhg: pio,
+      cct_um:   cct
+    },
+    outputs: {
+      adjusted_iop_mmhg: adjusted_iop,
+      adjustment_mmhg:   adjustment,
+      cct_label:         cct_label,
+      impact_class:      impact_class,
+      confidence_level:  'moderate',
+      caution_flags:     caution_flags
+    },
+    model: {
+      type:                'linear',
+      reference_cct_um:    540,
+      factor_um_per_mmhg:  25
+    }
+  };
+}
+
+/* ── Validation ─────────────────────────────────────────────── */
+function validate() {
+  var ok = true;
+
+  var pioEl  = document.getElementById('pio');
+  var pioErr = document.getElementById('pio-error');
+  var pioRaw = pioEl.value.trim();
+
+  if (!pioRaw) {
+    setError(pioEl, pioErr, 'Required field'); ok = false;
+  } else {
+    var pv = parseFloat(pioRaw);
+    if (isNaN(pv))                        { setError(pioEl, pioErr, 'Enter a valid number'); ok = false; }
+    else if (pv < PIO_MIN || pv > PIO_MAX){ setError(pioEl, pioErr, 'Outside clinical range (' + PIO_MIN + '-' + PIO_MAX + ' mmHg)'); ok = false; }
+    else                                  { clearError(pioEl, pioErr); }
+  }
+
+  var cctEl  = document.getElementById('cct');
+  var cctErr = document.getElementById('cct-error');
+  var cctRaw = cctEl.value.trim();
+
+  if (!cctRaw) {
+    setError(cctEl, cctErr, 'Required field'); ok = false;
+  } else {
+    var cv = parseFloat(cctRaw);
+    if (isNaN(cv))                        { setError(cctEl, cctErr, 'Enter a valid number'); ok = false; }
+    else if (cv < CCT_MIN || cv > CCT_MAX){ setError(cctEl, cctErr, 'Outside clinical range (' + CCT_MIN + '-' + CCT_MAX + ' µm)'); ok = false; }
+    else                                  { clearError(cctEl, cctErr); }
+  }
+
+  return ok;
+}
+
+function setError(input, errEl, msg) {
+  input.classList.add('is-error');
+}
+function clearError(input, errEl) {
+  input.classList.remove('is-error');
+}
+
+/* ── Calculate ──────────────────────────────────────────────── */
+function calculate() {
+  if (!validate()) return;
+
+  var pio = parseFloat(document.getElementById('pio').value);
+  var cct = parseFloat(document.getElementById('cct').value);
+
+  var r = computeM1_IOP_CCT(pio, cct);
+  lastResult = r;
+
+  /* ── OFTY Suite integration: persist result for M5 import ── */
+  try {
+    var _m1Store = JSON.parse(JSON.stringify(r));
+    _m1Store._timestamp = new Date().toISOString();
+    localStorage.setItem('ofty_m1_result', JSON.stringify(_m1Store));
+  } catch(e) {}
+
+  var pioAdj     = r.outputs.adjusted_iop_mmhg;
+  var adjustment = r.outputs.adjustment_mmhg;
+  var cct_label  = r.outputs.cct_label;
+
+  /* primary result */
+  document.getElementById('res-pio').textContent = pioAdj.toFixed(1);
+
+  /* measured IOP row */
+  document.getElementById('res-measured').textContent = pio.toFixed(1) + ' mmHg';
+
+  /* range warning */
+  var warn = document.getElementById('res-warning');
+  warn.style.display = (pioAdj < 0 || pioAdj > 80) ? 'block' : 'none';
+
+  /* adjustment row */
+  var sign = adjustment > 0 ? '+' : '';
+  document.getElementById('res-delta').textContent = sign + adjustment.toFixed(1) + ' mmHg';
+
+  /* CCT row */
+  var labelText = cct_label + ' cornea';
+  document.getElementById('res-cct-info').textContent = Math.round(cct) + ' µm — ' + labelText;
+
+  /* show card */
+  var card = document.getElementById('result-card');
+  card.classList.add('is-visible');
+
+  /* reset copy button */
+  resetCopyBtn();
+
+  /* scroll */
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  setTimeout(function() {
+    card.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest' });
+  }, 80);
+}
+
+/* ── Reset ──────────────────────────────────────────────────── */
+function resetAll() {
+  ['pio', 'cct'].forEach(function(id) {
+    var el  = document.getElementById(id);
+    var err = document.getElementById(id + '-error');
+    el.value = '';
+    clearError(el, err);
+  });
+  document.getElementById('result-card').classList.remove('is-visible');
+  lastResult = null;
+  document.getElementById('pio').focus();
+}
+
+/* ── Copy ───────────────────────────────────────────────────── */
+function copyResult() {
+  if (!lastResult) return;
+  var r          = lastResult;
+  var pio        = r.inputs.pio_mmhg;
+  var cct        = r.inputs.cct_um;
+  var pioAdj     = r.outputs.adjusted_iop_mmhg;
+  var adjustment = r.outputs.adjustment_mmhg;
+  var sign       = adjustment > 0 ? '+' : '';
+  var cctLabel   = r.outputs.cct_label;
+
+  var lines = [];
+  lines.push('Measured IOP: ' + pio.toFixed(1) + ' mmHg');
+  lines.push('CCT: ' + Math.round(cct) + ' \u00b5m (' + cctLabel + ')');
+  lines.push('Applied adjustment: ' + sign + adjustment.toFixed(1) + ' mmHg');
+  lines.push('Adjusted IOP estimate: ' + pioAdj.toFixed(1) + ' mmHg');
+  lines.push('');
+  lines.push('Generated with OFTY Tool M1 v1.0');
+
+  var text = lines.join('\n');
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopied, function() { fallbackCopy(text); });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); showCopied(); }
+  catch(e) { alert('Could not copy automatically. Please copy manually:\n\n' + text); }
+  document.body.removeChild(ta);
+}
+
+function showCopied() {
+  var btn = document.getElementById('btn-copy');
+  btn.classList.add('is-copied');
+  btn.innerHTML =
+    '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>' +
+    ' Copied!';
+  setTimeout(function() { resetCopyBtn(); }, 2500);
+}
+
+function resetCopyBtn() {
+  var btn = document.getElementById('btn-copy');
+  btn.classList.remove('is-copied');
+  btn.innerHTML =
+    '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
+    ' Copy';
+}
+
+/* ── Collapsibles ───────────────────────────────────────────── */
+function toggleCollapse(id) {
+  var el = document.getElementById(id);
+  var isOpen = el.classList.toggle('is-open');
+  var trigger = el.querySelector('.collapse-trigger');
+  if (trigger) trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+
+function toggleMore(id, btn) {
+  var el = document.getElementById(id);
+  var isOpen = el.classList.toggle('is-open');
+  btn.textContent = isOpen ? 'Hide full disclaimer' : 'Read full disclaimer';
+}
+
+/* ── Init ───────────────────────────────────────────────────── */
+window.addEventListener('load', function() {
+  document.getElementById('pio').focus();
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    var a = document.activeElement;
+    if (a && (a.id === 'pio' || a.id === 'cct')) calculate();
+  }
+});
+
+['pio', 'cct'].forEach(function(id) {
+  document.getElementById(id).addEventListener('input', function() {
+    clearError(this, document.getElementById(id + '-error'));
+  });
+});
+
+['pio', 'cct'].forEach(function(id) {
+  var el = document.getElementById(id);
+  function _clearErr() { el.classList.remove('is-error'); }
+  el.addEventListener('input', _clearErr);
+  el.addEventListener('blur',  _clearErr);
+});
+</script>
+</body>
+</html>
